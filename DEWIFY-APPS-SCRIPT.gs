@@ -1,18 +1,17 @@
 /**
  * DEWIFY — Google Sheets Order API
  *
- * Deploy this script as a Web App:
+ * Deploy as Web App:
  *   Execute as: Me
  *   Who has access: Anyone
  *
- * Spreadsheet:
- *   Sheet name: DEWIFY Orders
- *
- * The script accepts only the fields needed to create a store order.
- * No Google credentials are ever sent from the customer browser.
+ * IMPORTANT:
+ * Put your Google Spreadsheet ID below.
  */
 
+const SPREADSHEET_ID = "1uSjmnq_7uP0y4PlJtmRchtHB7ouzFbIrfp0YuQG5oic";
 const SHEET_NAME = "DEWIFY Orders";
+
 const HEADERS = [
   "Order ID",
   "Date/Time",
@@ -30,8 +29,6 @@ const HEADERS = [
   "Order Status"
 ];
 
-// Optional: restrict where requests can come from at the application layer.
-// Browser CORS is handled by using a simple text/plain POST from the storefront.
 const MAX_NAME = 120;
 const MAX_PHONE = 30;
 const MAX_EMAIL = 200;
@@ -41,6 +38,11 @@ const MAX_STATE = 100;
 const MAX_PIN = 6;
 const MAX_ITEMS = 30;
 
+
+/* =========================================================
+   GET — Health check
+   ========================================================= */
+
 function doGet() {
   return json_({
     ok: true,
@@ -49,6 +51,11 @@ function doGet() {
   });
 }
 
+
+/* =========================================================
+   POST — Create order
+   ========================================================= */
+
 function doPost(e) {
   const lock = LockService.getScriptLock();
 
@@ -56,24 +63,36 @@ function doPost(e) {
     lock.waitLock(10000);
 
     if (!e || !e.postData || typeof e.postData.contents !== "string") {
-      return json_({ ok: false, error: "Missing request body." });
+      throw new Error("Missing request body.");
     }
 
+    console.log("Incoming request:");
+    console.log(e.postData.contents);
+
     let input;
+
     try {
       input = JSON.parse(e.postData.contents);
-    } catch (_) {
-      return json_({ ok: false, error: "Invalid JSON." });
+    } catch (parseError) {
+      throw new Error("Invalid JSON request body.");
     }
 
     const order = validateAndNormalize_(input);
 
+    console.log("Validated order:");
+    console.log(JSON.stringify(order));
+
     const sheet = getOrdersSheet_();
 
-    // Idempotency: if the same checkout request reaches Apps Script twice,
-    // return the original order instead of creating a duplicate row.
-    const existing = findClientRequestId_(sheet, order.clientRequestId);
+    /* -----------------------------------------------------
+       Prevent duplicate checkout submissions
+       ----------------------------------------------------- */
+
+    const existing = findClientRequestId_(order.clientRequestId);
+
     if (existing) {
+      console.log("Duplicate request detected.");
+
       return json_({
         ok: true,
         duplicate: true,
@@ -83,18 +102,34 @@ function doPost(e) {
       });
     }
 
+
+    /* -----------------------------------------------------
+       Generate order ID
+       ----------------------------------------------------- */
+
     const orderId = createUniqueOrderId_(sheet);
     const now = new Date();
 
+
+    /* -----------------------------------------------------
+       Format products
+       ----------------------------------------------------- */
+
     const productText = order.items
-      .map(item => `${item.name} × ${item.qty}`)
+      .map(function(item) {
+        return item.name + " × " + item.qty;
+      })
       .join(" | ");
 
-    const quantity = order.items.reduce((sum, item) => sum + item.qty, 0);
+    const quantity = order.items.reduce(function(sum, item) {
+      return sum + item.qty;
+    }, 0);
 
-    // Client request ID is intentionally kept in a developer column only if
-    // you choose to add it. The required public sheet columns remain exactly
-    // the columns above. Idempotency uses PropertiesService instead.
+
+    /* -----------------------------------------------------
+       Build spreadsheet row
+       ----------------------------------------------------- */
+
     const row = [
       orderId,
       now,
@@ -112,13 +147,34 @@ function doPost(e) {
       "NEW"
     ];
 
+
+    /* -----------------------------------------------------
+       Write order
+       ----------------------------------------------------- */
+
+    console.log("Writing order to sheet...");
+    console.log("Sheet: " + sheet.getName());
+
     sheet.appendRow(row);
 
-    // Store idempotency key after the row has been written.
+    SpreadsheetApp.flush();
+
+    console.log("Order successfully written: " + orderId);
+
+
+    /* -----------------------------------------------------
+       Save idempotency key
+       ----------------------------------------------------- */
+
     rememberClientRequest_(order.clientRequestId, {
       orderId: orderId,
       createdAt: now.toISOString()
     });
+
+
+    /* -----------------------------------------------------
+       Success response
+       ----------------------------------------------------- */
 
     return json_({
       ok: true,
@@ -128,25 +184,58 @@ function doPost(e) {
     });
 
   } catch (err) {
+
+    console.error("DEWIFY ORDER ERROR:");
     console.error(err && err.stack ? err.stack : err);
+
     return json_({
       ok: false,
-      error: "Unable to create the order."
+      error: err && err.message
+        ? err.message
+        : String(err)
     });
+
   } finally {
-    try { lock.releaseLock(); } catch (_) {}
+
+    try {
+      lock.releaseLock();
+    } catch (_) {}
+
   }
 }
 
+
+/* =========================================================
+   Validate + normalize order
+   ========================================================= */
+
 function validateAndNormalize_(input) {
+
   if (!input || typeof input !== "object") {
     throw new Error("Invalid payload.");
   }
 
-  const clientRequestId = clean_(input.clientRequestId, 100);
-  if (!clientRequestId) throw new Error("Missing request ID.");
+
+  /* -------------------------------------------------------
+     Request ID
+     ------------------------------------------------------- */
+
+  const clientRequestId = clean_(
+    input.clientRequestId,
+    100
+  );
+
+  if (!clientRequestId) {
+    throw new Error("Missing request ID.");
+  }
+
+
+  /* -------------------------------------------------------
+     Customer
+     ------------------------------------------------------- */
 
   const c = input.customer || {};
+
   const customer = {
     name: clean_(c.name, MAX_NAME),
     phone: clean_(c.phone, MAX_PHONE),
@@ -157,184 +246,470 @@ function validateAndNormalize_(input) {
     pincode: clean_(c.pincode, MAX_PIN)
   };
 
-  if (!customer.name) throw new Error("Customer name is required.");
+
+  if (!customer.name) {
+    throw new Error("Customer name is required.");
+  }
+
   if (!/^\+?[0-9\s()\-]{10,20}$/.test(customer.phone)) {
     throw new Error("Invalid phone number.");
   }
+
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(customer.email)) {
     throw new Error("Invalid email.");
   }
-  if (!customer.address) throw new Error("Address is required.");
-  if (!customer.city) throw new Error("City is required.");
-  if (!customer.state) throw new Error("State is required.");
+
+  if (!customer.address) {
+    throw new Error("Address is required.");
+  }
+
+  if (!customer.city) {
+    throw new Error("City is required.");
+  }
+
+  if (!customer.state) {
+    throw new Error("State is required.");
+  }
+
   if (!/^\d{6}$/.test(customer.pincode)) {
     throw new Error("Invalid PIN code.");
   }
 
-  if (!Array.isArray(input.items) || input.items.length < 1 || input.items.length > MAX_ITEMS) {
+
+  /* -------------------------------------------------------
+     Products
+     ------------------------------------------------------- */
+
+  if (
+    !Array.isArray(input.items) ||
+    input.items.length < 1 ||
+    input.items.length > MAX_ITEMS
+  ) {
     throw new Error("Invalid items.");
   }
 
-  const items = input.items.map(item => {
+
+  const items = input.items.map(function(item) {
+
     const name = clean_(item.name, 200);
     const id = clean_(item.id, 100);
+
     const qty = Number(item.qty);
     const price = Number(item.price);
     const subtotal = Number(item.subtotal);
 
-    if (!name || !id) throw new Error("Invalid product.");
-    if (!Number.isInteger(qty) || qty < 1 || qty > 99) {
+
+    if (!name || !id) {
+      throw new Error("Invalid product.");
+    }
+
+    if (
+      !Number.isInteger(qty) ||
+      qty < 1 ||
+      qty > 99
+    ) {
       throw new Error("Invalid quantity.");
     }
-    if (!Number.isFinite(price) || price < 0 || price > 100000000) {
+
+    if (
+      !Number.isFinite(price) ||
+      price < 0 ||
+      price > 100000000
+    ) {
       throw new Error("Invalid product price.");
     }
-    if (!Number.isFinite(subtotal) || subtotal < 0) {
+
+    if (
+      !Number.isFinite(subtotal) ||
+      subtotal < 0
+    ) {
       throw new Error("Invalid product subtotal.");
     }
 
-    return { id, name, qty, price, subtotal };
+
+    return {
+      id: id,
+      name: name,
+      qty: qty,
+      price: price,
+      subtotal: subtotal
+    };
+
   });
 
-  // Recalculate the total on the backend instead of trusting the browser.
-  const calculatedTotal = items.reduce((sum, item) => {
-    return sum + (item.price * item.qty);
-  }, 0);
 
-  if (!Number.isFinite(calculatedTotal) || calculatedTotal < 0) {
+  /* -------------------------------------------------------
+     Calculate total on server
+     ------------------------------------------------------- */
+
+  const calculatedTotal = items.reduce(
+    function(sum, item) {
+      return sum + (item.price * item.qty);
+    },
+    0
+  );
+
+
+  if (
+    !Number.isFinite(calculatedTotal) ||
+    calculatedTotal < 0
+  ) {
     throw new Error("Invalid total.");
   }
 
-  const paymentMethod = clean_(input.paymentMethod, 30).toUpperCase();
-  if (paymentMethod !== "COD" && paymentMethod !== "UPI") {
+
+  /* -------------------------------------------------------
+     Payment method
+     ------------------------------------------------------- */
+
+  const paymentMethod = clean_(
+    input.paymentMethod,
+    30
+  ).toUpperCase();
+
+
+  if (
+    paymentMethod !== "COD" &&
+    paymentMethod !== "UPI"
+  ) {
     throw new Error("Invalid payment method.");
   }
 
+
   return {
-    clientRequestId,
-    customer,
-    items,
+    clientRequestId: clientRequestId,
+    customer: customer,
+    items: items,
     total: Math.round(calculatedTotal),
-    paymentMethod
+    paymentMethod: paymentMethod
   };
 }
 
+
+/* =========================================================
+   Get spreadsheet + worksheet
+   ========================================================= */
+
 function getOrdersSheet_() {
-  const ss = SpreadsheetApp.getActiveSpreadsheet();
-  if (!ss) throw new Error("Spreadsheet is not available.");
+
+  if (
+    !SPREADSHEET_ID ||
+    SPREADSHEET_ID === "PASTE_YOUR_SPREADSHEET_ID_HERE"
+  ) {
+    throw new Error(
+      "SPREADSHEET_ID has not been configured."
+    );
+  }
+
+
+  let ss;
+
+  try {
+    ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+  } catch (err) {
+    throw new Error(
+      "Could not open spreadsheet. Check SPREADSHEET_ID and Apps Script authorization."
+    );
+  }
+
+
+  if (!ss) {
+    throw new Error("Spreadsheet could not be opened.");
+  }
+
 
   let sheet = ss.getSheetByName(SHEET_NAME);
+
+
+  /* -------------------------------------------------------
+     Create worksheet if missing
+     ------------------------------------------------------- */
+
   if (!sheet) {
+
+    console.log(
+      'Worksheet "' + SHEET_NAME + '" not found. Creating it.'
+    );
+
     sheet = ss.insertSheet(SHEET_NAME);
   }
 
+
+  /* -------------------------------------------------------
+     Create headers if sheet is empty
+     ------------------------------------------------------- */
+
   if (sheet.getLastRow() === 0) {
-    sheet.getRange(1, 1, 1, HEADERS.length).setValues([HEADERS]);
+
+    sheet
+      .getRange(1, 1, 1, HEADERS.length)
+      .setValues([HEADERS]);
+
     sheet.setFrozenRows(1);
-    sheet.getRange(1, 1, 1, HEADERS.length).setFontWeight("bold");
+
+    sheet
+      .getRange(1, 1, 1, HEADERS.length)
+      .setFontWeight("bold");
+
   } else {
-    const current = sheet.getRange(1, 1, 1, HEADERS.length).getValues()[0];
-    const matches = HEADERS.every((h, i) => current[i] === h);
+
+    const currentHeaders = sheet
+      .getRange(1, 1, 1, HEADERS.length)
+      .getValues()[0];
+
+
+    const matches = HEADERS.every(
+      function(header, index) {
+        return currentHeaders[index] === header;
+      }
+    );
+
+
     if (!matches) {
+
       throw new Error(
-        `The first row of "${SHEET_NAME}" does not match the required headers.`
+        'The first row of "' +
+        SHEET_NAME +
+        '" does not match the required headers.'
       );
     }
   }
 
+
   return sheet;
 }
 
-function createUniqueOrderId_(sheet) {
-  const values = sheet.getRange(
-    2,
-    1,
-    Math.max(sheet.getLastRow() - 1, 1),
-    1
-  ).getDisplayValues().flat();
 
-  const used = new Set(values.filter(Boolean));
+/* =========================================================
+   Generate unique order ID
+   ========================================================= */
+
+function createUniqueOrderId_(sheet) {
+
+  const lastRow = sheet.getLastRow();
+
+  let values = [];
+
+  if (lastRow >= 2) {
+
+    values = sheet
+      .getRange(2, 1, lastRow - 1, 1)
+      .getDisplayValues()
+      .flat();
+  }
+
+
+  const used = new Set(
+    values.filter(Boolean)
+  );
+
 
   let id;
+
   do {
-    id = "DEWIFY-" + Math.floor(100000 + Math.random() * 900000);
+
+    id =
+      "DEWIFY-" +
+      Math.floor(
+        100000 +
+        Math.random() * 900000
+      );
+
   } while (used.has(id));
+
 
   return id;
 }
 
-/**
- * Idempotency storage:
- * User properties are not appropriate because every visitor has no Google
- * account session. Script properties are shared, so we keep a small bounded
- * JSON map. This is enough to protect short-lived duplicate clicks/retries.
- */
-function findClientRequestId_(sheet, requestId) {
-  const props = PropertiesService.getScriptProperties();
-  const raw = props.getProperty("DEWIFY_IDEMPOTENCY");
-  if (!raw) return null;
+
+/* =========================================================
+   Idempotency
+   ========================================================= */
+
+function findClientRequestId_(requestId) {
+
+  const props =
+    PropertiesService.getScriptProperties();
+
+  const raw =
+    props.getProperty("DEWIFY_IDEMPOTENCY");
+
+
+  if (!raw) {
+    return null;
+  }
+
 
   try {
-    const map = JSON.parse(raw);
-    const hit = map[requestId];
-    if (!hit) return null;
 
-    // Expire keys after 24 hours.
-    if (Date.now() - new Date(hit.createdAt).getTime() > 24 * 60 * 60 * 1000) {
-      delete map[requestId];
-      props.setProperty("DEWIFY_IDEMPOTENCY", JSON.stringify(map));
+    const map = JSON.parse(raw);
+
+    const hit = map[requestId];
+
+
+    if (!hit) {
       return null;
     }
 
+
+    /* Expire after 24 hours */
+
+    if (
+      Date.now() -
+      new Date(hit.createdAt).getTime() >
+      24 * 60 * 60 * 1000
+    ) {
+
+      delete map[requestId];
+
+      props.setProperty(
+        "DEWIFY_IDEMPOTENCY",
+        JSON.stringify(map)
+      );
+
+      return null;
+    }
+
+
     return hit;
+
   } catch (_) {
+
     return null;
   }
 }
 
-function rememberClientRequest_(requestId, value) {
-  const props = PropertiesService.getScriptProperties();
+
+function rememberClientRequest_(
+  requestId,
+  value
+) {
+
+  const props =
+    PropertiesService.getScriptProperties();
+
   let map = {};
 
-  try {
-    map = JSON.parse(props.getProperty("DEWIFY_IDEMPOTENCY") || "{}");
-  } catch (_) {}
 
-  // Remove entries older than 24 hours and cap the map.
+  try {
+
+    map = JSON.parse(
+      props.getProperty(
+        "DEWIFY_IDEMPOTENCY"
+      ) || "{}"
+    );
+
+  } catch (_) {
+
+    map = {};
+  }
+
+
   const now = Date.now();
-  Object.keys(map).forEach(key => {
-    if (!map[key] || now - new Date(map[key].createdAt).getTime() > 24 * 60 * 60 * 1000) {
-      delete map[key];
+
+
+  /* Remove entries older than 24 hours */
+
+  Object.keys(map).forEach(
+    function(key) {
+
+      if (
+        !map[key] ||
+        now -
+          new Date(
+            map[key].createdAt
+          ).getTime() >
+          24 * 60 * 60 * 1000
+      ) {
+
+        delete map[key];
+      }
+
     }
-  });
+  );
+
 
   map[requestId] = value;
 
+
+  /* Keep maximum 500 entries */
+
   const keys = Object.keys(map);
+
+
   if (keys.length > 500) {
+
     keys
-      .sort((a, b) => new Date(map[a].createdAt) - new Date(map[b].createdAt))
-      .slice(0, keys.length - 500)
-      .forEach(key => delete map[key]);
+      .sort(
+        function(a, b) {
+
+          return (
+            new Date(map[a].createdAt) -
+            new Date(map[b].createdAt)
+          );
+
+        }
+      )
+      .slice(
+        0,
+        keys.length - 500
+      )
+      .forEach(
+        function(key) {
+          delete map[key];
+        }
+      );
   }
 
-  props.setProperty("DEWIFY_IDEMPOTENCY", JSON.stringify(map));
+
+  props.setProperty(
+    "DEWIFY_IDEMPOTENCY",
+    JSON.stringify(map)
+  );
 }
 
+
+/* =========================================================
+   Clean user input
+   ========================================================= */
+
 function clean_(value, maxLength) {
-  if (value === null || value === undefined) return "";
+
+  if (
+    value === null ||
+    value === undefined
+  ) {
+    return "";
+  }
+
+
   let text = String(value).trim();
 
-  // Prevent spreadsheet formula injection if a malicious value begins with
-  // a formula character. Prefixing with an apostrophe makes Sheets store it
-  // as plain text.
-  if (/^[=+\-@]/.test(text)) text = "'" + text;
+
+  /*
+   * Prevent spreadsheet formula injection.
+   */
+
+  if (/^[=+\-@]/.test(text)) {
+    text = "'" + text;
+  }
+
 
   return text.slice(0, maxLength);
 }
 
+
+/* =========================================================
+   JSON response
+   ========================================================= */
+
 function json_(data) {
+
   return ContentService
-    .createTextOutput(JSON.stringify(data))
-    .setMimeType(ContentService.MimeType.JSON);
+    .createTextOutput(
+      JSON.stringify(data)
+    )
+    .setMimeType(
+      ContentService.MimeType.JSON
+    );
 }
