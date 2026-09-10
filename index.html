@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#080808">
+  <meta name="description" content="DEWIFY — curated goods for everyday life.">
+  <title>DEWIFY — Curated Goods</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="noise" aria-hidden="true"></div>
+
+  <header class="site-header" id="top">
+    <nav class="nav container" aria-label="Main navigation">
+      <a class="brand" href="#top" aria-label="DEWIFY home">DEWIFY</a>
+      <div class="nav-links">
+        <a href="#shop">Shop</a>
+        <a href="#about">About</a>
+        <a href="#faq">FAQ</a>
+      </div>
+      <button class="bag-button" id="openBag" type="button" aria-label="Open shopping bag">
+        Bag <span id="bagCount">0</span>
+      </button>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero container" aria-labelledby="heroTitle">
+      <div class="hero-copy">
+        <p class="eyebrow reveal">DEWIFY / EVERYDAY EDITION</p>
+        <h1 id="heroTitle" class="hero-title reveal">UPGRADE<br><span>YOUR</span><br>EVERYDAY.</h1>
+        <div class="hero-bottom reveal">
+          <p>Curated essentials with a sharper point of view. Designed for the things you actually use.</p>
+          <a class="button button-light" href="#shop">Explore the drop <span>↘</span></a>
+        </div>
+      </div>
+      <div class="hero-art reveal" aria-label="Abstract DEWIFY product visual">
+        <div class="art-frame">
+          <div class="art-grid"></div>
+          <div class="art-disc"></div>
+          <div class="art-product">
+            <span>DW / 01</span>
+            <strong>OBJECT<br>NO. 01</strong>
+          </div>
+          <div class="art-caption">FORM / FUNCTION / DAILY</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="ticker" aria-label="DEWIFY highlights">
+      <div class="ticker-track">
+        <span>DEWIFY</span><i>—</i><span>CURATED GOODS</span><i>—</i><span>BUILT FOR EVERYDAY</span><i>—</i>
+        <span>DEWIFY</span><i>—</i><span>CURATED GOODS</span><i>—</i><span>BUILT FOR EVERYDAY</span><i>—</i>
+      </div>
+    </section>
+
+    <section class="shop section container" id="shop" aria-labelledby="shopTitle">
+      <div class="section-heading reveal">
+        <div>
+          <p class="eyebrow">THE CURRENT EDIT</p>
+          <h2 id="shopTitle">Find your next favourite.</h2>
+        </div>
+        <p class="section-note">A considered mix of wear, tech and utility.</p>
+      </div>
+      <div class="filters" id="filters" role="group" aria-label="Filter products">
+        <button class="filter active" data-filter="All" type="button">All</button>
+        <button class="filter" data-filter="Wear" type="button">Wear</button>
+        <button class="filter" data-filter="Tech" type="button">Tech</button>
+        <button class="filter" data-filter="Utility" type="button">Utility</button>
+      </div>
+      <div class="product-grid" id="productGrid" aria-live="polite"></div>
+    </section>
+
+    <section class="manifesto section" id="about">
+      <div class="container manifesto-inner">
+        <p class="eyebrow reveal">THE DEWIFY IDEA</p>
+        <h2 class="reveal">Less noise.<br><em>Better things.</em></h2>
+        <div class="manifesto-copy reveal">
+          <p>DEWIFY is a point of view on everyday objects: useful, considered and never overworked.</p>
+          <p>We keep the catalogue focused and the experience simple. The goal is not more stuff. It is finding the right stuff.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="faq section container" id="faq" aria-labelledby="faqTitle">
+      <div class="section-heading reveal">
+        <div>
+          <p class="eyebrow">NEED TO KNOW</p>
+          <h2 id="faqTitle">Questions, answered.</h2>
+        </div>
+      </div>
+      <div class="faq-list">
+        <details class="faq-item reveal">
+          <summary>How do I order?<span>+</span></summary>
+          <p>Add products to your bag, enter your delivery details and submit the checkout form. Your order is sent to DEWIFY through the store backend and saved in the order database.</p>
+        </details>
+        <details class="faq-item reveal">
+          <summary>Can I pay by UPI?<span>+</span></summary>
+          <p>The checkout records your selected payment method. Payment verification is handled separately and is not claimed by this checkout.</p>
+        </details>
+        <details class="faq-item reveal">
+          <summary>How does delivery work?<span>+</span></summary>
+          <p>Delivery terms are not defined for this demo storefront. Once real fulfilment is connected, delivery coverage, estimates and policies should be published here.</p>
+        </details>
+        <details class="faq-item reveal">
+          <summary>Can I cancel an order?<span>+</span></summary>
+          <p>Cancellation policy is not defined for this demo. For a live store, publish a clear cancellation and refund policy before accepting payment.</p>
+        </details>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <a class="brand" href="#top">DEWIFY</a>
+      <div class="footer-links">
+        <a href="#shop">Shop</a>
+        <a href="#about">About</a>
+        <a href="#faq">FAQ</a>
+        <a href="terms.html">Terms</a>
+        <a href="privacy.html">Privacy</a>
+      </div>
+      <p>© 2026 DEWIFY</p>
+    </div>
+  </footer>
+
+  <aside class="cart-drawer" id="cartDrawer" aria-hidden="true" aria-labelledby="bagTitle">
+    <div class="drawer-backdrop" id="drawerBackdrop"></div>
+    <div class="drawer-panel">
+      <div class="drawer-head">
+        <div>
+          <p class="eyebrow">YOUR SELECTION</p>
+          <h2 id="bagTitle">Your Bag</h2>
+        </div>
+        <button class="icon-button" id="closeBag" type="button" aria-label="Close bag">×</button>
+      </div>
+      <div class="cart-content" id="cartContent"></div>
+      <div class="cart-footer" id="cartFooter"></div>
+    </div>
+  </aside>
+
+  <div class="modal" id="checkoutModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="checkoutTitle">
+    <div class="modal-backdrop" id="modalBackdrop"></div>
+    <div class="checkout-panel">
+      <div class="drawer-head">
+        <div>
+          <p class="eyebrow">DEWIFY / CHECKOUT</p>
+          <h2 id="checkoutTitle">Complete order</h2>
+        </div>
+        <button class="icon-button" id="closeCheckout" type="button" aria-label="Close checkout">×</button>
+      </div>
+      <div class="checkout-layout">
+        <form id="checkoutForm" novalidate>
+          <label>Full name<input id="customerName" name="name" autocomplete="name" required></label>
+          <label>Phone number<input id="customerPhone" name="phone" type="tel" inputmode="tel" autocomplete="tel" required></label>
+          <label>Email address<input id="customerEmail" name="email" type="email" autocomplete="email" required></label>
+          <label>Full delivery address<textarea id="customerAddress" name="address" autocomplete="street-address" rows="4" required></textarea></label>
+          <div class="checkout-fields-two"><label>City<input id="customerCity" name="city" autocomplete="address-level2" required></label><label>State<input id="customerState" name="state" autocomplete="address-level1" required></label></div>
+          <label>Pincode<input id="customerPincode" name="pincode" inputmode="numeric" autocomplete="postal-code" pattern="[0-9]{6}" required></label>
+          <label>Payment method
+            <select id="paymentMethod" name="paymentMethod" required>
+              <option value="COD" selected>Cash on Delivery</option>
+              <option value="UPI">UPI — payment to be confirmed</option>
+            </select>
+          </label>
+          <div class="payment-note">
+            <span>ORDER DATABASE</span>
+            <strong>Google Sheets</strong>
+            <p>Your order is securely sent to the DEWIFY order system. Payment is not verified by this checkout.</p>
+          </div>
+          <p class="form-error" id="formError" role="alert"></p>
+          <button class="button button-light button-full" type="submit">Place order <span>↗</span></button>
+        </form>
+        <div class="checkout-summary">
+          <p class="eyebrow">ORDER SUMMARY</p>
+          <div id="checkoutItems"></div>
+          <div class="summary-total"><span>Total</span><strong id="checkoutTotal">₹0</strong></div>
+          <p class="summary-footnote">Your order is created independently. WhatsApp is optional.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="modal order-success" id="orderSuccess" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="successTitle">
+    <div class="modal-backdrop" id="successBackdrop"></div>
+    <div class="success-panel">
+      <div class="success-mark" aria-hidden="true">✓</div>
+      <p class="eyebrow">DEWIFY / ORDER CREATED</p>
+      <h2 id="successTitle">Your order is ready.</h2>
+      <p class="success-lead">Your order has been created. WhatsApp is optional and is not required to place this order.</p>
+
+      <div class="success-grid">
+        <div><span>ORDER ID</span><strong id="successOrderId">DEWIFY-000000</strong></div>
+        <div><span>CUSTOMER</span><strong id="successCustomer">—</strong></div>
+        <div><span>TOTAL</span><strong id="successTotal">₹0</strong></div>
+        <div><span>STATUS</span><strong id="successStatus">Awaiting WhatsApp confirmation</strong></div>
+      </div>
+
+      <div class="success-actions">
+        <button class="button button-light" id="copyOrderMessage" type="button">Copy order message</button>
+        <button class="button button-ghost" id="closeOrderSuccess" type="button">Done</button>
+      </div>
+      <p class="success-note">Payment is not collected in this version. Your order is stored in the DEWIFY order system; WhatsApp is optional.</p>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

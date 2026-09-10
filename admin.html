@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0a0a0a">
+  <title>DEWIFY ADMIN</title>
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <div class="brand-mark">D</div>
+        <div><strong>DEWIFY</strong><span>ADMIN</span></div>
+      </div>
+      <nav>
+        <button class="nav-item active" data-view="overview"><span>⌂</span>Overview</button>
+        <button class="nav-item" data-view="orders"><span>▤</span>Orders</button>
+        <button class="nav-item" data-view="products"><span>◇</span>Products</button>
+        <button class="nav-item" data-view="settings"><span>⚙</span>Settings</button>
+      </nav>
+      <div class="sidebar-bottom">
+        <a href="index.html" class="store-link">↗ Storefront</a>
+        <button class="reset-link" id="resetData">↻ Reset demo data</button>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <button class="mobile-menu" id="mobileMenu">☰</button>
+        <div>
+          <div class="eyebrow" id="pageEyebrow">CONTROL CENTER</div>
+          <h1 id="pageTitle">Overview</h1>
+        </div>
+        <div class="topbar-right">
+          <span class="live-dot"></span><span id="connectionLabel">Cloud ready</span><button class="notify-toggle" id="enableNotifications" type="button">Enable notifications</button>
+        </div>
+      </header>
+
+      <section class="content">
+        <div id="view-overview" class="view active"></div>
+        <div id="view-orders" class="view"></div>
+        <div id="view-products" class="view"></div>
+        <div id="view-settings" class="view"></div>
+      </section>
+    </main>
+  </div>
+
+  <div class="overlay" id="overlay"></div>
+  <aside class="order-drawer" id="orderDrawer">
+    <div class="drawer-head">
+      <button class="icon-btn" id="closeDrawer">×</button>
+      <div>
+        <div class="eyebrow">ORDER DETAILS</div>
+        <h2 id="drawerOrderId">—</h2>
+      </div>
+      <button class="icon-btn danger" id="deleteOrder" title="Delete order">⌫</button>
+    </div>
+    <div id="drawerBody" class="drawer-body"></div>
+  </aside>
+
+  <div class="toast" id="toast"></div>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>
+  <script src="admin.js"></script>
+<div class="auth-screen" id="authScreen" hidden>
+  <div class="auth-card">
+    <div class="brand"><div class="brand-mark">D</div><div><strong>DEWIFY</strong><span>ADMIN</span></div></div>
+    <div class="eyebrow">PRIVATE CONTROL PANEL</div>
+    <h2>Sign in</h2>
+    <p>Admin access is protected by Supabase Auth.</p>
+    <form id="loginForm"><input id="loginEmail" type="email" placeholder="Admin email" autocomplete="email" required><input id="loginPassword" type="password" placeholder="Password" autocomplete="current-password" required><button class="btn" type="submit">Sign in</button><div id="loginError" class="login-error"></div></form>
+  </div>
+</div>
+</body>
+</html>
