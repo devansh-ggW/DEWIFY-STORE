@@ -370,9 +370,24 @@ async function submitOrder(event) {
       cache: "no-store"
     });
 
+    console.info("DEWIFY checkout response:", {
+      status: response.status,
+      ok: response.ok,
+      url: response.url
+    });
+
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
-    const result = await response.json();
+    const rawResponse = await response.text();
+    console.info("DEWIFY checkout backend response:", rawResponse);
+
+    let result;
+    try {
+      result = JSON.parse(rawResponse);
+    } catch {
+      throw new Error(`Backend returned non-JSON response: ${rawResponse.slice(0, 180)}`);
+    }
+
     if (!result || result.ok !== true || !result.orderId) {
       throw new Error(result?.error || "Invalid backend response");
     }
@@ -402,8 +417,7 @@ async function submitOrder(event) {
     form.reset();
   } catch (e) {
     console.error("DEWIFY order submission failed:", e);
-    error.textContent =
-      "We couldn't place your order. Please check your connection and try again.";
+    error.textContent = `Order failed: ${e?.message || "Unknown error"}`;
   } finally {
     form.dataset.submitting = "false";
     if (submitButton) {
