@@ -6,15 +6,120 @@
 const WHATSAPP_NUMBER = "919422843899";
 const GOOGLE_APPS_SCRIPT_URL = window.DEWIFY_CONFIG?.GOOGLE_APPS_SCRIPT_URL || "";
 
+// Product titles are intentionally rewritten for DEWIFY rather than copying
+// CJ's long supplier titles. Prices are provisional storefront prices in INR;
+// final profitability still depends on destination-specific CJ shipping cost.
 const PRODUCTS = [
-  { id: "dw-tee", name: "Oversized Utility Tee", category: "Wear", price: 899, badge: "NEW", kind: "tee" },
-  { id: "dw-sling", name: "Minimal Crossbody Sling", category: "Utility", price: 749, badge: "DROP", kind: "sling" },
-  { id: "dw-hoodie", name: "Classic Street Hoodie", category: "Wear", price: 1499, badge: "", kind: "hoodie" },
-  { id: "dw-speaker", name: "Pocket Bluetooth Speaker", category: "Tech", price: 1299, badge: "HOT", kind: "speaker" },
-  { id: "dw-organizer", name: "Everyday Tech Organizer", category: "Utility", price: 699, badge: "", kind: "organizer" },
-  { id: "dw-lamp", name: "Metal Desk Lamp", category: "Utility", price: 1199, badge: "NEW", kind: "lamp" },
-  { id: "dw-case", name: "Wireless Earbuds Case", category: "Tech", price: 499, badge: "", kind: "case" },
-  { id: "dw-cap", name: "Everyday Cap", category: "Wear", price: 599, badge: "", kind: "cap" }
+  {
+    id: "dw-storage-vault",
+    name: "FoldAway Storage Vault",
+    category: "Utility",
+    price: 799,
+    badge: "SMART PICK",
+    kind: "organizer",
+    sourceUrl: "https://cjdropshipping.com/product/foldable-clothes-storage-bag-large-capacity-organizer-with-handle-and-double-zipper-for-bedding-moving-travel-under-bed-storage-p-2505160457141629100.html",
+    sku: "CJYD237778201AZ"
+  },
+  {
+    id: "dw-witchlight",
+    name: "Witchlight Gothic Hat Lamp",
+    category: "Utility",
+    price: 1499,
+    badge: "LIMITED",
+    kind: "lamp",
+    sourceUrl: "https://cjdropshipping.com/product/witch-hat-lamps-creative-home-gothic-night-light-gift-witch-hat-light-ornament-halloween-home-ornament-decoration-p-2607040852081633100.html",
+    sku: "CJYD296761901AZ"
+  },
+  {
+    id: "dw-heatcore-jacket",
+    name: "HeatCore USB Heated Jacket",
+    category: "Wear",
+    price: 2499,
+    badge: "WINTER",
+    kind: "hoodie",
+    sourceUrl: "https://cjdropshipping.com/product/winter-heated-jacket-usb-electric-cotton-coat-zip-up-heater-thermal-clothing-heating-vest-for-men-p-1578267399776907264.html",
+    sku: "CJYR158132801AZ"
+  },
+  {
+    id: "dw-moonglow-pendant",
+    name: "MoonGlow Luminous Pendant",
+    category: "Wear",
+    price: 699,
+    badge: "GLOW",
+    kind: "case",
+    sourceUrl: "https://cjdropshipping.com/product/fashion-moon-natural-glowing-stone-healing-necklace-women-gift-charm-luminous-pendant-necklace-jewelry-p-F0403505-748E-4F3C-A9BB-70E390109230.html",
+    sku: "CJZBLXLX00017-purple"
+  },
+  {
+    id: "dw-fruity-paws",
+    name: "Fruity Paws Cozy Hoodie",
+    category: "Utility",
+    price: 799,
+    badge: "PET PICK",
+    kind: "tee",
+    sourceUrl: "https://cjdropshipping.com/product/cute-fruit-dog-clothes-for-small-dogs-hoodies-winter-warm-fleece-pet-clothing-puppy-cat-costume-coat-for-french-chihuahua-outfit-p-1403920038016192512.html",
+    sku: "CJGD117239401AZ"
+  },
+  {
+    id: "dw-bunnyglow",
+    name: "BunnyGlow Touch Night Light",
+    category: "Utility",
+    price: 1299,
+    badge: "SOFT GLOW",
+    kind: "lamp",
+    sourceUrl: "https://cjdropshipping.com/product/cute-led-night-light-touch-sensor-cartoon-kids-nightlights-big-face-rabbit-silicone-night-light-christmas-gift-bedside-lamp-home-decor-p-1770035341261541376.html",
+    sku: "CJYD199189901AZ"
+  },
+  {
+    id: "dw-orbitmoon-lamp",
+    name: "OrbitMoon Crystal Night Lamp",
+    category: "Utility",
+    price: 899,
+    badge: "AMBIENT",
+    kind: "lamp",
+    sourceUrl: "https://cjdropshipping.com/product/luminous-starry-sky-and-planets-moon-moon-crystal-ball-small-night-lamp-projection-ambience-light-creative-gift-new-strange-gift-p-1555129918592397312.html",
+    sku: "CJJT153840401AZ"
+  },
+  {
+    id: "dw-temptrack-bottle",
+    name: "TempTrack Insulated Bottle",
+    category: "Utility",
+    price: 1099,
+    badge: "DAILY USE",
+    kind: "speaker",
+    sourceUrl: "https://cjdropshipping.com/product/smart-digital-thermal-bottle-portable-coffee-mug-stainless-steel-water-bottle-in-car-insulated-cup-keep-cold-vacuum-flasks-450ml-p-1737828106674647040.html",
+    sku: "CJJT192676801AZ"
+  },
+  {
+    id: "dw-cloudwarm-socks",
+    name: "CloudWarm Over-Knee Socks",
+    category: "Wear",
+    price: 899,
+    badge: "COZY",
+    kind: "cap",
+    sourceUrl: "https://cjdropshipping.com/product/over-knee-high-fuzzy-long-socks-winter-warm-cold-leg-knee-joint-cold-proof-stockings-home-floor-sleeping-socks-p-1668434970181902336.html",
+    sku: "CJYD177740901AZ"
+  },
+  {
+    id: "dw-ravenhide-watch",
+    name: "RavenHide Retro Leather Watch",
+    category: "Wear",
+    price: 1299,
+    badge: "CLASSIC",
+    kind: "case",
+    sourceUrl: "https://cjdropshipping.com/product/accessories-foreign-trade-watches-retro-cowhide-watches-punk-watches-mens-wrist-watches-p-1391988614027677696.html",
+    sku: "CJYD112291701AZ"
+  },
+  {
+    id: "dw-pup-match-vest",
+    name: "PupMatch Sports Vest",
+    category: "Utility",
+    price: 699,
+    badge: "PET PICK",
+    kind: "tee",
+    sourceUrl: "https://cjdropshipping.com/product/hot-world-cup-ball-spring-and-summer-dog-vest-pet-supplies-p-CF1F5B6A-0BB3-4740-A3FA-803C6D6C2.html",
+    sku: "CJJJCWGD00413-Red-XL"
+  }
 ];
 
 const CART_KEY = "dewify-cart-v2";
@@ -61,10 +166,6 @@ function loadOrders() {
   }
 }
 
-function saveOrders(orders) {
-  localStorage.setItem(ORDERS_KEY, JSON.stringify(orders));
-}
-
 function getProduct(id) {
   return PRODUCTS.find(product => product.id === id);
 }
@@ -90,7 +191,7 @@ function renderProducts() {
     ? PRODUCTS
     : PRODUCTS.filter(product => product.category === activeFilter);
 
-  $("#productGrid").innerHTML = visible.map((product, index) => `
+  $("#productGrid").innerHTML = visible.map(product => `
     <article class="product-card reveal visible">
       <div class="product-visual" data-kind="${product.kind}">
         ${product.badge ? `<span class="product-tag">${product.badge}</span>` : ""}
@@ -228,35 +329,16 @@ function renderCheckoutSummary() {
   $("#checkoutTotal").textContent = money(cartTotal());
 }
 
-function createOrderId() {
-  const existing = new Set(loadOrders().map(order => order.id));
-  let id = "";
-  do {
-    id = `DEWIFY-${Math.floor(100000 + Math.random() * 900000)}`;
-  } while (existing.has(id));
-  return id;
+function createClientRequestId() {
+  try {
+    if (crypto.randomUUID) return crypto.randomUUID();
+  } catch (_) {}
+  return `${Date.now()}-${Math.random().toString(36).slice(2)}`;
 }
 
 function validPhone(phone) {
   const digits = phone.replace(/\D/g, "");
   return digits.length >= 10 && digits.length <= 15;
-}
-
-function buildOrder({ name, phone, email, address, city, state, pincode }) {
-  const id = createOrderId();
-  const createdAt = new Date().toISOString();
-  const items = cart.map(item => {
-    const product = getProduct(item.id);
-    return { id: product.id, name: product.name, price: product.price, qty: item.qty, subtotal: product.price * item.qty };
-  });
-  return {
-    id, createdAt,
-    customer: { name, phone, email, address, city, state, pincode },
-    items,
-    total: items.reduce((sum, item) => sum + item.subtotal, 0),
-    paymentStatus: "PENDING / DEMO",
-    orderStatus: "NEW"
-  };
 }
 
 function buildWhatsAppMessage(order) {
@@ -282,10 +364,10 @@ function buildWhatsAppMessage(order) {
     itemLines,
     "",
     `TOTAL: ${money(order.total)}`,
-    "PAYMENT: DEMO — NOT PAID",
-    "STATUS: NEW DEMO ORDER",
+    "PAYMENT: ONLINE — PENDING",
+    "STATUS: NEW",
     "",
-    "Please confirm this order manually."
+    "Payment is not collected in this version."
   ].join("\n");
 }
 
@@ -301,7 +383,6 @@ async function submitOrder(event) {
   const city = $("#customerCity").value.trim();
   const state = $("#customerState").value.trim();
   const pincode = $("#customerPincode").value.trim();
-  const paymentMethod = $("#paymentMethod")?.value || "COD";
 
   if (!name) { error.textContent = "Please enter your full name."; $("#customerName").focus(); return; }
   if (!validPhone(phone)) { error.textContent = "Please enter a valid phone number."; $("#customerPhone").focus(); return; }
@@ -318,23 +399,15 @@ async function submitOrder(event) {
 
   const form = $("#checkoutForm");
   const submitButton = form.querySelector('button[type="submit"]');
-
-  // One submission can be in flight at a time. This blocks double taps/clicks.
   if (form.dataset.submitting === "true") return;
   form.dataset.submitting = "true";
 
-  const originalText = submitButton?.textContent || "Place order";
+  const originalText = submitButton?.textContent || "Submit order request";
   if (submitButton) {
     submitButton.disabled = true;
     submitButton.setAttribute("aria-busy", "true");
-    submitButton.textContent = "Placing order…";
+    submitButton.textContent = "Submitting…";
   }
-
-  // The Apps Script endpoint generates the final Order ID server-side.
-  // clientRequestId lets the backend reject an accidental retry of the same checkout.
-  const clientRequestId = (crypto.randomUUID
-    ? crypto.randomUUID()
-    : `${Date.now()}-${Math.random().toString(36).slice(2)}`);
 
   const items = cart.map(item => {
     const product = getProduct(item.id);
@@ -343,25 +416,21 @@ async function submitOrder(event) {
       name: product.name,
       price: product.price,
       qty: item.qty,
-      subtotal: product.price * item.qty
+      subtotal: product.price * item.qty,
+      sourceUrl: product.sourceUrl,
+      sku: product.sku
     };
   });
 
   const payload = {
-    clientRequestId,
+    clientRequestId: createClientRequestId(),
     customer: { name, phone, email, address, city, state, pincode },
     items,
     total: items.reduce((sum, item) => sum + item.subtotal, 0),
-    paymentMethod
+    paymentMethod: "ONLINE"
   };
 
   try {
-    /*
-      IMPORTANT:
-      Content-Type is text/plain instead of application/json so the request is a
-      CORS "simple request" and does not trigger an OPTIONS preflight, which
-      Google Apps Script web apps do not handle like a normal API server.
-    */
     const response = await fetch(GOOGLE_APPS_SCRIPT_URL, {
       method: "POST",
       headers: { "Content-Type": "text/plain;charset=utf-8" },
@@ -370,17 +439,9 @@ async function submitOrder(event) {
       cache: "no-store"
     });
 
-    console.info("DEWIFY checkout response:", {
-      status: response.status,
-      ok: response.ok,
-      url: response.url
-    });
-
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
     const rawResponse = await response.text();
-    console.info("DEWIFY checkout backend response:", rawResponse);
-
     let result;
     try {
       result = JSON.parse(rawResponse);
@@ -398,8 +459,8 @@ async function submitOrder(event) {
       customer: payload.customer,
       items: payload.items,
       total: payload.total,
-      paymentMethod: payload.paymentMethod,
-      paymentStatus: "PENDING",
+      paymentMethod: "ONLINE",
+      paymentStatus: result.paymentStatus || "PENDING",
       orderStatus: result.orderStatus || "NEW"
     };
 
@@ -427,6 +488,7 @@ async function submitOrder(event) {
     }
   }
 }
+
 function openOrderSuccess(order) {
   $("#successOrderId").textContent = order.id;
   $("#successCustomer").textContent = order.customer.name;
@@ -454,6 +516,7 @@ function copyOrderMessage() {
 
 function showToast(message) {
   const toast = $("#toast");
+  if (!toast) return;
   toast.textContent = message;
   toast.classList.add("show");
   clearTimeout(showToast.timer);
