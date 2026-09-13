@@ -1,6 +1,6 @@
 /* DEWIFY — lightweight cinematic starfield
-   Tiny dot stars, restrained brightness, and smooth cursor repulsion on fine pointers.
-   Mobile stays visually anchored during browser viewport changes so stars never "teleport".
+   Tiny, visible dot stars with restrained brightness and smooth cursor repulsion.
+   Resize-safe: stars preserve their relative positions so mobile browsers never teleport them.
 */
 (function(){
   "use strict";
@@ -15,17 +15,15 @@
   const mouse={x:-9999,y:-9999,active:false};
   let dpr=1,w=0,h=0,raf=0,settleTimer=0,resizeTimer=0,initialized=false;
 
-  function addStar(x,y,r,a,gold){
-    stars.push({x,y,ox:x,oy:y,tx:x,ty:y,cx:x,cy:y,r,a,gold});
-  }
+  function addStar(x,y,r,a,gold){stars.push({x,y,ox:x,oy:y,tx:x,ty:y,cx:x,cy:y,r,a,gold});}
 
   function build(){
     stars.length=0;
-    const count=Math.max(150,Math.min(230,Math.floor((w*h)/6800)));
+    const count=Math.max(135,Math.min(195,Math.floor((w*h)/7600)));
     for(let i=0;i<count;i++){
-      const r=0.48+Math.random()*0.52;
-      const a=0.42+Math.random()*0.32;
-      addStar(Math.random()*w,Math.random()*h,r,a,Math.random()<.7);
+      const r=0.62+Math.random()*0.58;
+      const a=0.5+Math.random()*0.28;
+      addStar(Math.random()*w,Math.random()*h,r,a,Math.random()<.72);
     }
   }
 
@@ -43,10 +41,8 @@
       s.cx+=(s.tx-s.cx)*0.18;
       s.cy+=(s.ty-s.cy)*0.18;
       ctx.globalAlpha=s.a;
-      ctx.fillStyle=s.gold?"#f4d98b":"#f7edc9";
-      ctx.beginPath();
-      ctx.arc(s.cx,s.cy,s.r,0,Math.PI*2);
-      ctx.fill();
+      ctx.fillStyle=s.gold?"#f5db92":"#f8efcf";
+      ctx.beginPath();ctx.arc(s.cx,s.cy,s.r,0,Math.PI*2);ctx.fill();
     }
     ctx.globalAlpha=1;
   }
@@ -62,17 +58,11 @@
         const eased=force*force*(3-2*force);
         s.tx=s.ox+(dx/dist)*eased*maxDisplacement;
         s.ty=s.oy+(dy/dist)*eased*maxDisplacement;
-      }else{
-        s.tx=s.ox;s.ty=s.oy;
-      }
+      }else{s.tx=s.ox;s.ty=s.oy;}
     }
   }
 
-  function loop(){
-    raf=0;
-    draw();
-    if(mouse.active)raf=requestAnimationFrame(loop);
-  }
+  function loop(){raf=0;draw();if(mouse.active)raf=requestAnimationFrame(loop);}
   function wake(){if(!raf)raf=requestAnimationFrame(loop);}
 
   function applySize(){
@@ -86,28 +76,16 @@
     draw();
   }
 
-  function size(){
-    clearTimeout(resizeTimer);
-    resizeTimer=setTimeout(applySize,120);
-  }
+  function size(){clearTimeout(resizeTimer);resizeTimer=setTimeout(applySize,120);}
 
   if(fine&&!reduce){
     window.addEventListener("pointermove",e=>{
-      mouse.x=e.clientX;mouse.y=e.clientY;mouse.active=true;
-      updateTargets();
+      mouse.x=e.clientX;mouse.y=e.clientY;mouse.active=true;updateTargets();
       clearTimeout(settleTimer);
-      settleTimer=setTimeout(()=>{
-        mouse.active=false;
-        updateTargets();
-        wake();
-      },170);
+      settleTimer=setTimeout(()=>{mouse.active=false;updateTargets();wake();},170);
       wake();
     },{passive:true});
-    window.addEventListener("pointerleave",()=>{
-      mouse.active=false;
-      updateTargets();
-      wake();
-    },{passive:true});
+    window.addEventListener("pointerleave",()=>{mouse.active=false;updateTargets();wake();},{passive:true});
   }
 
   window.addEventListener("resize",size,{passive:true});
