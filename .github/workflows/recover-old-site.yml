@@ -20,10 +20,10 @@ jobs:
       - name: Remove workflow metadata from archive
         run: rm -rf .github
       - name: Create source ZIP
-        run: zip -r DEWIFY-STORE-OLD-SOURCE.zip . -x '.git/*'
+        run: zip -r /tmp/DEWIFY-STORE-OLD-SOURCE.zip . -x '.git/*' 'DEWIFY-STORE-OLD-SOURCE.zip'
       - name: Upload source ZIP
         uses: actions/upload-artifact@v4
         with:
           name: DEWIFY-STORE-OLD-SOURCE
-          path: DEWIFY-STORE-OLD-SOURCE.zip
+          path: /tmp/DEWIFY-STORE-OLD-SOURCE.zip
           retention-days: 7
