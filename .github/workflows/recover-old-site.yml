@@ -1,0 +1,29 @@
+name: Recover Old DEWIFY Source
+
+on:
+  push:
+    paths:
+      - '.github/workflows/recover-old-site.yml'
+  workflow_dispatch:
+
+jobs:
+  archive:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout historical site commit
+        uses: actions/checkout@v4
+        with:
+          ref: 3ac273d7d4a86c12f7400854ff2f43cda9c0444a
+          fetch-depth: 1
+      - name: Remove workflow metadata from archive
+        run: rm -rf .github
+      - name: Create source ZIP
+        run: zip -r DEWIFY-STORE-OLD-SOURCE.zip . -x '.git/*'
+      - name: Upload source ZIP
+        uses: actions/upload-artifact@v4
+        with:
+          name: DEWIFY-STORE-OLD-SOURCE
+          path: DEWIFY-STORE-OLD-SOURCE.zip
+          retention-days: 7
