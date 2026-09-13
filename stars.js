@@ -19,10 +19,10 @@
 
   function build(){
     stars.length=0;
-    const count=Math.max(135,Math.min(195,Math.floor((w*h)/7600)));
+    const count=Math.max(145,Math.min(205,Math.floor((w*h)/7300)));
     for(let i=0;i<count;i++){
-      const r=0.62+Math.random()*0.58;
-      const a=0.5+Math.random()*0.28;
+      const r=0.72+Math.random()*0.58;
+      const a=0.56+Math.random()*0.30;
       addStar(Math.random()*w,Math.random()*h,r,a,Math.random()<.72);
     }
   }
@@ -41,7 +41,7 @@
       s.cx+=(s.tx-s.cx)*0.18;
       s.cy+=(s.ty-s.cy)*0.18;
       ctx.globalAlpha=s.a;
-      ctx.fillStyle=s.gold?"#f5db92":"#f8efcf";
+      ctx.fillStyle=s.gold?"#f6d887":"#fbf2d3";
       ctx.beginPath();ctx.arc(s.cx,s.cy,s.r,0,Math.PI*2);ctx.fill();
     }
     ctx.globalAlpha=1;
