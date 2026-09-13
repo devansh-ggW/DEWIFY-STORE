@@ -1,0 +1,134 @@
+/* DEWIFY — restrained interaction layer
+   Motion is purposeful: depth, feedback, and navigation.
+*/
+:root { --dew-motion: cubic-bezier(.16,1,.3,1); }
+
+/* Card depth / cursor light */
+.product-card {
+  --mx: 50%; --my: 50%;
+  transform: translate3d(0,0,0) perspective(900px) rotateX(0deg) rotateY(0deg);
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+.product-card::before {
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:5;
+  pointer-events:none;
+  border-radius:inherit;
+  background: radial-gradient(280px circle at var(--mx) var(--my), rgba(255,255,255,.09), transparent 62%);
+  opacity:0;
+  transition:opacity .25s ease;
+}
+.product-card:hover::before { opacity:1; }
+.product-card .product-info { position:relative; z-index:2; }
+.product-card .product-visual { transform:translateZ(0); }
+
+/* Buttons have a physical press, not a generic fade. */
+.add-button, .button, .bag-button, .filter, .icon-button, .clear-button {
+  position:relative;
+  overflow:hidden;
+  isolation:isolate;
+}
+.add-button::after, .button::after, .bag-button::after, .filter::after {
+  content:"";
+  position:absolute;
+  width:70px;
+  height:70px;
+  left:var(--ripple-x,50%);
+  top:var(--ripple-y,50%);
+  border-radius:50%;
+  background:rgba(255,255,255,.16);
+  transform:translate(-50%,-50%) scale(0);
+  opacity:0;
+  pointer-events:none;
+}
+.interaction-ripple::after { animation: dewRipple .55s var(--dew-motion); }
+@keyframes dewRipple { 0%{transform:translate(-50%,-50%) scale(0);opacity:.8} 100%{transform:translate(-50%,-50%) scale(3.4);opacity:0} }
+
+/* Product image enters with a tiny reveal when the catalogue changes. */
+.product-card.dew-enter { animation: dewCardEnter .5s var(--dew-motion) both; }
+@keyframes dewCardEnter {
+  from { opacity:0; transform:translateY(12px) scale(.985); clip-path:inset(8% 0 0 round 16px); }
+  to { opacity:1; transform:translateY(0) scale(1); clip-path:inset(0 round 16px); }
+}
+
+/* Add-to-bag feedback */
+.product-card.dew-added { animation: dewAdded .52s var(--dew-motion); }
+@keyframes dewAdded {
+  0%,100% { transform:translate3d(0,0,0); }
+  35% { transform:translate3d(0,-7px,0) scale(1.012); }
+  70% { transform:translate3d(0,0,0) scale(.998); }
+}
+
+/* Featured product gets a quiet cinematic hover. */
+.hero-product-feature { transform:translateZ(0); }
+.hero-product-feature img { transform:scale(1); transition:transform .9s var(--dew-motion), filter .9s var(--dew-motion); }
+.hero-product-feature:hover img { transform:scale(1.055); filter:saturate(1.08) contrast(1.035); }
+.hero-product-feature::before {
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:2;
+  pointer-events:none;
+  background:linear-gradient(115deg,transparent 28%,rgba(255,255,255,.18) 48%,transparent 68%);
+  transform:translateX(-125%);
+}
+.hero-product-feature:hover::before { animation:heroSweep .9s var(--dew-motion) both; }
+@keyframes heroSweep { to { transform:translateX(125%); } }
+
+/* Detail page opens with a scale/slide rather than a fade. */
+.product-detail-panel {
+  transform:translateY(28px) scale(.965) !important;
+  opacity:1 !important;
+  clip-path:inset(2.5% 2.5% 2.5% 2.5% round 22px);
+  transition:transform .5s var(--dew-motion), clip-path .5s var(--dew-motion), box-shadow .5s var(--dew-motion) !important;
+  box-shadow:0 30px 100px rgba(0,0,0,.5);
+}
+.product-detail-modal.is-open .product-detail-panel {
+  transform:translateY(0) scale(1) !important;
+  clip-path:inset(0 round 22px);
+}
+.product-detail-modal .modal-backdrop { opacity:0; transition:opacity .35s ease; }
+.product-detail-modal.is-open .modal-backdrop { opacity:1; }
+
+/* Image hover depth in detail view. */
+.product-detail-main-image { position:relative; }
+.product-detail-main-image::after {
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:linear-gradient(120deg,transparent 35%,rgba(255,255,255,.09) 50%,transparent 65%);
+  transform:translateX(-120%);
+}
+.product-detail-main-image:hover::after { animation:detailSweep .8s var(--dew-motion); }
+@keyframes detailSweep { to { transform:translateX(120%); } }
+
+/* Cart opens with a physical slide. */
+.cart-drawer .drawer-panel {
+  transform:translateX(100%);
+  transition:transform .48s var(--dew-motion) !important;
+}
+.cart-drawer.is-open .drawer-panel { transform:translateX(0); }
+
+/* Bag count pops only when its value changes. */
+.bag-button.dew-count-pop span { animation:bagPop .42s var(--dew-motion); }
+@keyframes bagPop { 0%{transform:scale(1)} 45%{transform:scale(1.35)} 100%{transform:scale(1)} }
+
+/* Ripple feedback should not interfere with keyboard focus. */
+:focus-visible { outline:2px solid rgba(243,241,235,.85); outline-offset:3px; }
+
+@media (max-width: 760px) {
+  .product-card::before { display:none; }
+  .product-card.dew-enter { animation-duration:.4s; }
+  .hero-product-feature::before { display:none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .product-card, .product-card::before, .product-card.dew-enter, .product-card.dew-added,
+  .hero-product-feature img, .product-detail-panel, .product-detail-modal .modal-backdrop,
+  .product-detail-main-image::after, .cart-drawer .drawer-panel, .bag-button.dew-count-pop span,
+  .interaction-ripple::after { animation:none !important; transition:none !important; }
+}
