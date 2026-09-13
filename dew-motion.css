@@ -1,0 +1,30 @@
+/* DEWIFY — refined motion layer. All motion uses eased curves; lightweight CSS only. */
+:root{--dew-ease:cubic-bezier(.16,1,.3,1);--dew-ease-soft:cubic-bezier(.22,.75,.24,1);--dew-ease-back:cubic-bezier(.34,1.56,.64,1)}
+.product-card{transition:transform .58s var(--dew-ease),box-shadow .58s var(--dew-ease)}
+.product-card:hover .product-visual{transform:translateZ(6px)}
+.product-card-image,.product-visual.has-product-image img{transition:transform .72s var(--dew-ease),filter .72s var(--dew-ease);}
+.product-card.dew-filtering{opacity:.35;transform:translateY(7px) scale(.985);transition:opacity .28s var(--dew-ease-soft),transform .4s var(--dew-ease)}
+.product-card.dew-filter-in{animation:dewFilterIn .56s var(--dew-ease) both;animation-delay:var(--filter-delay,0ms)}
+@keyframes dewFilterIn{from{opacity:0;transform:translateY(12px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
+.dew-scroll-reveal{opacity:0;transform:translateY(20px) scale(.99)}
+.dew-scroll-reveal.dew-scroll-visible{opacity:1;transform:none;transition:opacity .68s var(--dew-ease-soft),transform .78s var(--dew-ease)}
+.site-header{transition:padding .48s var(--dew-ease),background-color .48s var(--dew-ease-soft),box-shadow .48s var(--dew-ease-soft)}
+body.dew-header-compact .site-header{padding-top:.58rem!important;padding-bottom:.58rem!important;box-shadow:0 12px 32px rgba(0,0,0,.18)}
+.product-tag{animation:dewBadgeFloat 4.8s var(--dew-ease-soft) infinite}
+@keyframes dewBadgeFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-1px)}}
+.dew-flight{position:fixed!important;z-index:9999!important;pointer-events:none!important;margin:0!important;overflow:hidden!important;border-radius:18px!important;object-fit:cover!important;will-change:transform,opacity;box-shadow:0 14px 40px rgba(0,0,0,.3),0 0 28px rgba(255,229,137,.2)}
+.dew-flight-go{animation:dewFlight .9s var(--dew-ease) both}
+@keyframes dewFlight{0%{opacity:1;transform:translate3d(0,0,0) rotate(0) scale(1)}24%{opacity:1;transform:translate3d(var(--fx1),var(--fy1),0) rotate(var(--fr1)) scale(.88)}58%{opacity:.98;transform:translate3d(var(--fx2),var(--fy2),0) rotate(var(--fr2)) scale(.52)}82%{opacity:.82;transform:translate3d(var(--fx3),var(--fy3),0) rotate(var(--fr3)) scale(.2)}100%{opacity:0;transform:translate3d(var(--fx),var(--fy),0) rotate(var(--fr)) scale(.035)}}
+.dew-flight-glint{position:absolute;left:-25%;top:0;width:150%;height:100%;pointer-events:none;background:linear-gradient(110deg,transparent 42%,rgba(255,255,255,.28) 50%,transparent 58%);animation:dewFlightGlint .34s var(--dew-ease) both}
+@keyframes dewFlightGlint{from{transform:translateX(-45%)}to{transform:translateX(45%)}}
+.dew-burst{position:fixed;z-index:10000;width:1px;height:1px;pointer-events:none;transform:translate(-50%,-50%)}
+.dew-burst-core{position:absolute;left:50%;top:50%;width:8px;height:8px;margin:-4px;border-radius:50%;background:#fff9dc;box-shadow:0 0 10px rgba(255,238,166,.95),0 0 26px rgba(255,220,100,.55);animation:dewCoreBurst .5s var(--dew-ease-back) both}
+.dew-burst-ring{position:absolute;left:50%;top:50%;width:12px;height:12px;margin:-6px;border:1px solid rgba(255,235,146,.8);border-radius:50%;animation:dewRingBurst .58s var(--dew-ease) both}
+@keyframes dewCoreBurst{0%{transform:scale(.15);opacity:0}18%{transform:scale(1.45);opacity:1}100%{transform:scale(.35);opacity:0}}
+@keyframes dewRingBurst{0%{transform:scale(.15);opacity:.9}100%{transform:scale(4.2);opacity:0}}
+.dew-burst-p{position:absolute;left:50%;top:50%;width:3px;height:3px;margin:-1.5px;border-radius:50%;background:#fff6ca;box-shadow:0 0 7px rgba(255,226,125,.75);animation:dewParticle .62s var(--dew-ease) both;transform:translate(-50%,-50%);}
+@keyframes dewParticle{from{transform:translate(-50%,-50%) translate(0,0) scale(1);opacity:1}to{transform:translate(-50%,-50%) translate(var(--dx),var(--dy)) scale(.08);opacity:0}}
+.dew-tap-burst{position:fixed;z-index:9998;width:1px;height:1px;pointer-events:none}.dew-tap-burst i{position:absolute;width:4px;height:4px;margin:-2px;border-radius:50%;background:#fff6ce;box-shadow:0 0 7px rgba(255,224,126,.6);animation:dewTap .48s var(--dew-ease) both}
+@keyframes dewTap{from{transform:translate(0,0) scale(1);opacity:.95}to{transform:translate(var(--dx),var(--dy)) scale(.1);opacity:0}}
+@media(max-width:760px){.product-card:hover .product-visual{transform:none}.product-tag{animation:none}.dew-flight{width:82px!important;height:82px!important}}
+@media(prefers-reduced-motion:reduce){.product-card,.product-card-image,.product-visual.has-product-image img,.site-header,.product-tag,.dew-flight,.dew-burst-core,.dew-burst-ring,.dew-burst-p,.dew-tap-burst i{animation:none!important;transition:none!important}body.dew-header-compact .site-header{padding-top:initial!important;padding-bottom:initial!important;box-shadow:none!important}}
