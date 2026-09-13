@@ -10,9 +10,7 @@
   justify-content: stretch !important;
 }
 
-.product-detail-modal .modal-backdrop {
-  display: none !important;
-}
+.product-detail-modal .modal-backdrop { display: none !important; }
 
 .product-detail-modal .product-detail-panel {
   width: 100% !important;
@@ -27,18 +25,9 @@
   overscroll-behavior: contain;
 }
 
-.product-detail-modal.is-open .product-detail-panel {
-  transform: translateY(0) !important;
-}
-
-.product-detail-head {
-  min-height: 68px;
-  box-sizing: border-box;
-}
-
-.product-detail-grid {
-  min-height: calc(100dvh - 68px);
-}
+.product-detail-modal.is-open .product-detail-panel { transform: translateY(0) !important; }
+.product-detail-head { min-height: 68px; box-sizing: border-box; }
+.product-detail-grid { min-height: calc(100dvh - 68px); }
 
 .product-detail-gallery {
   min-width: 0;
@@ -60,9 +49,7 @@
   justify-content: center;
 }
 
-.product-detail-copy h1 {
-  max-width: 760px;
-}
+.product-detail-copy h1 { max-width: 760px; }
 
 @media (min-width: 761px) {
   .product-detail-gallery {
@@ -74,50 +61,153 @@
     overflow: auto;
     border-right: 1px solid var(--line);
   }
-
-  .product-detail-copy {
-    min-height: calc(100dvh - 68px);
-    box-sizing: border-box;
-  }
+  .product-detail-copy { min-height: calc(100dvh - 68px); box-sizing: border-box; }
 }
 
 @media (max-width: 760px) {
-  .product-detail-grid {
-    min-height: auto;
-  }
-
+  .product-detail-grid { min-height: auto; }
   .product-detail-gallery {
     border-right: 0 !important;
     border-bottom: 1px solid var(--line);
     padding: 12px;
   }
-
-  .product-detail-main-image {
-    max-height: none;
-    aspect-ratio: 1 / 1;
-  }
-
-  .product-detail-copy {
-    padding: 24px 18px 32px;
-    justify-content: flex-start;
-  }
-
-  .product-detail-copy h1 {
-    font-size: clamp(34px, 10vw, 48px);
-  }
-
-  .product-detail-head {
-    padding: 14px 16px;
-  }
+  .product-detail-main-image { max-height: none; aspect-ratio: 1 / 1; }
+  .product-detail-copy { padding: 24px 18px 32px; justify-content: flex-start; }
+  .product-detail-copy h1 { font-size: clamp(34px, 10vw, 48px); }
+  .product-detail-head { padding: 14px 16px; }
 }
 
 @supports not (height: 100dvh) {
-  .product-detail-modal .product-detail-panel {
-    height: 100vh !important;
-    min-height: 100vh !important;
-  }
+  .product-detail-modal .product-detail-panel { height: 100vh !important; min-height: 100vh !important; }
+  .product-detail-grid { min-height: calc(100vh - 68px); }
+}
 
-  .product-detail-grid {
-    min-height: calc(100vh - 68px);
-  }
+/* ============================================================
+   DEWIFY — Refined UI pass
+   Cleaner, quieter, more mature visual system.
+   ============================================================ */
+
+:root {
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+}
+
+/* Remove the texture/noise layer for a cleaner storefront. */
+.noise { display: none !important; }
+
+.button,
+.bag-button,
+.filter,
+.add-button,
+.clear-button,
+.icon-button { border-radius: var(--radius-sm); }
+
+.button,
+.bag-button,
+.filter,
+.add-button,
+.clear-button {
+  transition: transform .22s var(--ease), background-color .22s var(--ease),
+    color .22s var(--ease), border-color .22s var(--ease), box-shadow .22s var(--ease);
+}
+
+.button:hover,
+.add-button:hover,
+.bag-button:hover { transform: translateY(-1px); }
+
+/* Product cards become softer and more editorial. */
+.product-card {
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  border-color: rgba(243,241,235,.11);
+  box-shadow: 0 10px 30px rgba(0,0,0,.12);
+}
+
+.product-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(243,241,235,.2);
+  box-shadow: 0 18px 42px rgba(0,0,0,.2);
+}
+
+.product-visual {
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  background: #151515;
+}
+
+.product-card-image,
+.product-visual.has-product-image img {
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+}
+
+.product-info { padding: 17px; }
+.product-name { line-height: 1.1; }
+
+.product-tag {
+  top: 12px;
+  left: 12px;
+  border-radius: 999px;
+  padding: 7px 9px;
+  letter-spacing: .08em;
+}
+
+/* Restrained pill filters. */
+.filter { border-radius: 999px; padding: 10px 16px; }
+
+.hero { gap: clamp(36px, 6vw, 84px); }
+
+.art-frame {
+  border-radius: var(--radius-xl);
+  box-shadow: 0 24px 70px rgba(0,0,0,.2);
+}
+
+.art-product { border-radius: var(--radius-md); }
+
+/* Retail-style cart thumbnails. */
+.cart-line { grid-template-columns: 78px 1fr auto; gap: 15px; padding: 17px 0; }
+.mini-visual { border-radius: var(--radius-md); overflow: hidden; }
+.cart-product-image { border-radius: var(--radius-md); }
+.qty { border-radius: var(--radius-sm); overflow: hidden; }
+
+/* Rounded gallery imagery on the full-screen product view. */
+.product-detail-main-image,
+.product-detail-gallery img {
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.product-detail-thumb,
+.product-detail-thumb img {
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.dewify-image-fallback { border-radius: var(--radius-lg); }
+.dewify-image-fallback.compact { border-radius: var(--radius-md); }
+
+.checkout-panel,
+.success-panel,
+.payment-note { border-radius: var(--radius-lg); }
+
+.checkout-panel,
+.success-panel,
+.drawer-panel { box-shadow: 0 28px 90px rgba(0,0,0,.3); }
+
+@media (max-width: 680px) {
+  .product-card { border-radius: 13px; }
+  .product-visual,
+  .product-card-image,
+  .product-visual.has-product-image img { border-radius: 13px 13px 0 0; }
+  .product-info { padding: 13px; }
+  .cart-line { grid-template-columns: 72px 1fr auto; }
+  .mini-visual,
+  .cart-product-image { border-radius: 11px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .button:hover,
+  .add-button:hover,
+  .bag-button:hover,
+  .product-card:hover { transform: none; }
 }
