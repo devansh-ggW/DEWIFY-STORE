@@ -177,6 +177,7 @@
       if (src) {
         thumb.removeAttribute("srcset");
         thumb.src = src;
+        thumb.closest("[data-detail-thumb]")?.setAttribute("data-detail-thumb", src);
         thumb.onerror = () => { thumb.style.visibility = "hidden"; };
       }
     });
