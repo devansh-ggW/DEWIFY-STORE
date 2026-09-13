@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#080808">
-  <meta name="description" content="DEWIFY — curated goods for everyday life.">
-  <title>DEWIFY — Curated Goods</title>
+  <meta name="description" content="DEWIFY — curated drops and useful digital products.">
+  <title>DEWIFY — Curated Drops</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -34,7 +34,7 @@
         <p class="eyebrow reveal">DEWIFY / EVERYDAY EDITION</p>
         <h1 id="heroTitle" class="hero-title reveal">UPGRADE<br><span>YOUR</span><br>EVERYDAY.</h1>
         <div class="hero-bottom reveal">
-          <p>Curated essentials with a sharper point of view. Designed for the things you actually use.</p>
+          <p>Useful drops, bold finds and everyday upgrades — selected for a reason, never just to fill the catalogue.</p>
           <a class="button button-light" href="#shop">Explore the drop <span>↘</span></a>
         </div>
       </div>
@@ -53,8 +53,8 @@
 
     <section class="ticker" aria-label="DEWIFY highlights">
       <div class="ticker-track">
-        <span>DEWIFY</span><i>—</i><span>CURATED GOODS</span><i>—</i><span>BUILT FOR EVERYDAY</span><i>—</i>
-        <span>DEWIFY</span><i>—</i><span>CURATED GOODS</span><i>—</i><span>BUILT FOR EVERYDAY</span><i>—</i>
+        <span>DEWIFY</span><i>—</i><span>CURATED DROPS</span><i>—</i><span>BUILT FOR EVERYDAY</span><i>—</i>
+        <span>DEWIFY</span><i>—</i><span>CURATED DROPS</span><i>—</i><span>BUILT FOR EVERYDAY</span><i>—</i>
       </div>
     </section>
 
@@ -64,13 +64,12 @@
           <p class="eyebrow">THE CURRENT EDIT</p>
           <h2 id="shopTitle">Find your next favourite.</h2>
         </div>
-        <p class="section-note">A considered mix of wear, tech and utility.</p>
+        <p class="section-note">A focused mix of home, wear and pet finds worth a second look.</p>
       </div>
       <div class="filters" id="filters" role="group" aria-label="Filter products">
         <button class="filter active" data-filter="All" type="button">All</button>
         <button class="filter" data-filter="Wear" type="button">Wear</button>
-        <button class="filter" data-filter="Tech" type="button">Tech</button>
-        <button class="filter" data-filter="Utility" type="button">Utility</button>
+        <button class="filter" data-filter="Utility" type="button">Home &amp; Daily</button>
       </div>
       <div class="product-grid" id="productGrid" aria-live="polite"></div>
     </section>
@@ -78,9 +77,9 @@
     <section class="manifesto section" id="about">
       <div class="container manifesto-inner">
         <p class="eyebrow reveal">THE DEWIFY IDEA</p>
-        <h2 class="reveal">Less noise.<br><em>Better things.</em></h2>
+        <h2 class="reveal">Less noise.<br><em>Better finds.</em></h2>
         <div class="manifesto-copy reveal">
-          <p>DEWIFY is a point of view on everyday objects: useful, considered and never overworked.</p>
+          <p>DEWIFY is a point of view on everyday products: useful, considered and never overworked.</p>
           <p>We keep the catalogue focused and the experience simple. The goal is not more stuff. It is finding the right stuff.</p>
         </div>
       </div>
@@ -96,19 +95,19 @@
       <div class="faq-list">
         <details class="faq-item reveal">
           <summary>How do I order?<span>+</span></summary>
-          <p>Add products to your bag, enter your delivery details and submit the checkout form. Your order is sent to DEWIFY through the store backend and saved in the order database.</p>
+          <p>Add products to your bag, enter your delivery details and submit the checkout form. Your order is sent to DEWIFY through the store backend and saved in the order system.</p>
         </details>
         <details class="faq-item reveal">
-          <summary>Can I pay by UPI?<span>+</span></summary>
-          <p>The checkout records your selected payment method. Payment verification is handled separately and is not claimed by this checkout.</p>
+          <summary>How do I pay?<span>+</span></summary>
+          <p>Online payment is planned for the live checkout. This version records the order as pending and does not claim that a payment has been collected.</p>
         </details>
         <details class="faq-item reveal">
           <summary>How does delivery work?<span>+</span></summary>
-          <p>Delivery terms are not defined for this demo storefront. Once real fulfilment is connected, delivery coverage, estimates and policies should be published here.</p>
+          <p>Product-level delivery coverage and estimates depend on the fulfilment route and destination. Confirm the available shipping route before publishing a product for sale.</p>
         </details>
         <details class="faq-item reveal">
           <summary>Can I cancel an order?<span>+</span></summary>
-          <p>Cancellation policy is not defined for this demo. For a live store, publish a clear cancellation and refund policy before accepting payment.</p>
+          <p>Cancellation and refund terms should be published before accepting live payment. Order support can be handled through the DEWIFY contact channel.</p>
         </details>
       </div>
     </section>
@@ -161,51 +160,44 @@
           <label>Full delivery address<textarea id="customerAddress" name="address" autocomplete="street-address" rows="4" required></textarea></label>
           <div class="checkout-fields-two"><label>City<input id="customerCity" name="city" autocomplete="address-level2" required></label><label>State<input id="customerState" name="state" autocomplete="address-level1" required></label></div>
           <label>Pincode<input id="customerPincode" name="pincode" inputmode="numeric" autocomplete="postal-code" pattern="[0-9]{6}" required></label>
-          <label>Payment method
-            <select id="paymentMethod" name="paymentMethod" required>
-              <option value="COD" selected>Cash on Delivery</option>
-              <option value="UPI">UPI — payment to be confirmed</option>
-            </select>
-          </label>
           <div class="payment-note">
-            <span>ORDER DATABASE</span>
-            <strong>Google Sheets</strong>
-            <p>Your order is securely sent to the DEWIFY order system. Payment is not verified by this checkout.</p>
+            <span>PAYMENT</span>
+            <strong>Online payment — coming soon</strong>
+            <p>Your order request is saved to the DEWIFY order system as <b>pending</b>. Razorpay will be connected here before live payment is enabled.</p>
           </div>
           <p class="form-error" id="formError" role="alert"></p>
-          <button class="button button-light button-full" type="submit">Place order <span>↗</span></button>
+          <button class="button button-light button-full" type="submit">Submit order request <span>↗</span></button>
         </form>
         <div class="checkout-summary">
           <p class="eyebrow">ORDER SUMMARY</p>
           <div id="checkoutItems"></div>
           <div class="summary-total"><span>Total</span><strong id="checkoutTotal">₹0</strong></div>
-          <p class="summary-footnote">Your order is created independently. WhatsApp is optional.</p>
+          <p class="summary-footnote">No payment is collected in this version.</p>
         </div>
       </div>
     </div>
   </div>
-
 
   <div class="modal order-success" id="orderSuccess" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="successTitle">
     <div class="modal-backdrop" id="successBackdrop"></div>
     <div class="success-panel">
       <div class="success-mark" aria-hidden="true">✓</div>
       <p class="eyebrow">DEWIFY / ORDER CREATED</p>
-      <h2 id="successTitle">Your order is ready.</h2>
-      <p class="success-lead">Your order has been created. WhatsApp is optional and is not required to place this order.</p>
+      <h2 id="successTitle">Your order request is ready.</h2>
+      <p class="success-lead">Your order details have been submitted. Payment is still pending until the live payment system is connected.</p>
 
       <div class="success-grid">
         <div><span>ORDER ID</span><strong id="successOrderId">DEWIFY-000000</strong></div>
         <div><span>CUSTOMER</span><strong id="successCustomer">—</strong></div>
         <div><span>TOTAL</span><strong id="successTotal">₹0</strong></div>
-        <div><span>STATUS</span><strong id="successStatus">Awaiting WhatsApp confirmation</strong></div>
+        <div><span>STATUS</span><strong id="successStatus">NEW</strong></div>
       </div>
 
       <div class="success-actions">
         <button class="button button-light" id="copyOrderMessage" type="button">Copy order message</button>
         <button class="button button-ghost" id="closeOrderSuccess" type="button">Done</button>
       </div>
-      <p class="success-note">Payment is not collected in this version. Your order is stored in the DEWIFY order system; WhatsApp is optional.</p>
+      <p class="success-note">Payment is not collected in this version. Your order is stored in the DEWIFY order system.</p>
     </div>
   </div>
 
