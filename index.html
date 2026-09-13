@@ -11,6 +11,7 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="product-details.css">
+  <link rel="stylesheet" href="refined-ui.css">
   <link rel="stylesheet" href="product-fullscreen.css">
 </head>
 <body>
@@ -40,15 +41,12 @@
           <a class="button button-light" href="#shop">Explore the drop <span>↘</span></a>
         </div>
       </div>
-      <div class="hero-art reveal" aria-label="Abstract DEWIFY product visual">
+      <div class="hero-art reveal" aria-label="Featured DEWIFY product">
         <div class="art-frame">
-          <div class="art-grid"></div>
-          <div class="art-disc"></div>
-          <div class="art-product">
-            <span>DW / 01</span>
-            <strong>OBJECT<br>NO. 01</strong>
-          </div>
-          <div class="art-caption">FORM / FUNCTION / DAILY</div>
+          <button class="hero-product-feature" id="heroProductFeature" type="button" data-product-id="dw-storage-vault" aria-label="View FoldAway Storage Vault details">
+            <img src="https://maqsood.me/cdn/shop/files/Product_Content_77.jpg?v=1785268495" alt="FoldAway Storage Vault product image" loading="eager" referrerpolicy="no-referrer">
+          </button>
+          <div class="art-caption">DW / 01 · FORM / FUNCTION / DAILY</div>
         </div>
       </div>
     </section>
@@ -187,14 +185,12 @@
       <p class="eyebrow">DEWIFY / ORDER CREATED</p>
       <h2 id="successTitle">Your order request is ready.</h2>
       <p class="success-lead">Your order details have been submitted. Payment is still pending until the live payment system is connected.</p>
-
       <div class="success-grid">
         <div><span>ORDER ID</span><strong id="successOrderId">DEWIFY-000000</strong></div>
         <div><span>CUSTOMER</span><strong id="successCustomer">—</strong></div>
         <div><span>TOTAL</span><strong id="successTotal">₹0</strong></div>
         <div><span>STATUS</span><strong id="successStatus">NEW</strong></div>
       </div>
-
       <div class="success-actions">
         <button class="button button-light" id="copyOrderMessage" type="button">Copy order message</button>
         <button class="button button-ghost" id="closeOrderSuccess" type="button">Done</button>
@@ -208,5 +204,6 @@
   <script src="app.js"></script>
   <script src="product-details.js"></script>
   <script src="product-image-runtime.js"></script>
+  <script src="hero-product.js"></script>
 </body>
 </html>
