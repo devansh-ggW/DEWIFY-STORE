@@ -1,14 +1,10 @@
-/* DEWIFY — lightweight catalog image light patches */
+/* DEWIFY — lightweight product-image light patches */
 .shop { position:relative; isolation:isolate; }
-
-/* Catalog spotlight removed — background starfield remains untouched. */
-.catalog-star { display:none !important; }
-
 .shop .section-heading,
 .shop .filters,
 .shop .product-grid { position:relative; z-index:2; }
 
-/* Light patches sit behind slightly inset product images; no blur filter required. */
+/* Soft local illumination behind product images — intentionally no blur filters. */
 .product-visual { background:#141414 !important; }
 .product-visual::after {
   z-index:0 !important; opacity:.98;
