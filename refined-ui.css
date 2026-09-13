@@ -1,0 +1,172 @@
+/* ============================================================
+   DEWIFY — Refined UI pass
+   Cleaner, quieter, more mature visual system.
+   No layout or functionality changes.
+   ============================================================ */
+
+:root {
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+}
+
+/* Remove the "generated texture" feeling and let the typography breathe. */
+.noise { display: none !important; }
+
+/* Softer, more intentional controls. */
+.button,
+.bag-button,
+.filter,
+.add-button,
+.clear-button,
+.icon-button {
+  border-radius: var(--radius-sm);
+}
+
+.button,
+.bag-button,
+.filter,
+.add-button,
+.clear-button {
+  transition: transform .22s var(--ease), background-color .22s var(--ease),
+              color .22s var(--ease), border-color .22s var(--ease), box-shadow .22s var(--ease);
+}
+
+.button:hover,
+.add-button:hover,
+.bag-button:hover { transform: translateY(-1px); }
+
+/* Product cards: clean editorial cards rather than hard-edged blocks. */
+.product-card {
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  border-color: rgba(243,241,235,.11);
+  box-shadow: 0 10px 30px rgba(0,0,0,.12);
+}
+
+.product-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(243,241,235,.2);
+  box-shadow: 0 18px 42px rgba(0,0,0,.2);
+}
+
+.product-visual {
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  background: #151515;
+}
+
+/* Actual product photos get the rounded treatment too. */
+.product-card-image,
+.product-visual.has-product-image img {
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+}
+
+.product-info { padding: 17px; }
+.product-name { line-height: 1.1; }
+
+.product-tag {
+  top: 12px;
+  left: 12px;
+  border-radius: 999px;
+  padding: 7px 9px;
+  letter-spacing: .08em;
+}
+
+/* Cleaner filter pills. */
+.filter {
+  border-radius: 999px;
+  padding: 10px 16px;
+}
+
+/* Hero becomes calmer and less "template demo". */
+.hero {
+  gap: clamp(36px, 6vw, 84px);
+}
+
+.art-frame {
+  border-radius: var(--radius-xl);
+  box-shadow: 0 24px 70px rgba(0,0,0,.2);
+}
+
+.art-product { border-radius: var(--radius-md); }
+
+/* Softer section rhythm and dividers. */
+.manifesto {
+  background: #0a0a0a;
+}
+
+/* Cart: the product image should look like a real retail thumbnail. */
+.cart-line {
+  grid-template-columns: 78px 1fr auto;
+  gap: 15px;
+  padding: 17px 0;
+}
+
+.mini-visual {
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.cart-product-image {
+  border-radius: var(--radius-md);
+}
+
+.qty {
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+/* Full-screen product details: polished gallery edges. */
+.product-detail-main-image,
+.product-detail-gallery img {
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.product-detail-thumb,
+.product-detail-thumb img {
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+/* Keep fallback artwork visually consistent with real images. */
+.dewify-image-fallback {
+  border-radius: var(--radius-lg);
+}
+
+.dewify-image-fallback.compact {
+  border-radius: var(--radius-md);
+}
+
+/* Checkout and secondary panels get restrained corners. */
+.checkout-panel,
+.success-panel,
+.payment-note {
+  border-radius: var(--radius-lg);
+}
+
+/* Don't let the rounded system look toy-like: keep borders subtle. */
+.checkout-panel,
+.success-panel,
+.drawer-panel {
+  box-shadow: 0 28px 90px rgba(0,0,0,.3);
+}
+
+@media (max-width: 680px) {
+  .product-card { border-radius: 13px; }
+  .product-visual,
+  .product-card-image,
+  .product-visual.has-product-image img { border-radius: 13px 13px 0 0; }
+  .product-info { padding: 13px; }
+  .cart-line { grid-template-columns: 72px 1fr auto; }
+  .mini-visual,
+  .cart-product-image { border-radius: 11px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .button:hover,
+  .add-button:hover,
+  .bag-button:hover,
+  .product-card:hover { transform: none; }
+}
