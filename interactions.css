@@ -33,16 +33,34 @@
 .product-card.dew-added { animation:dewAdded .52s var(--dew-motion); }
 @keyframes dewAdded { 0%,100%{transform:translate3d(0,0,0)} 35%{transform:translate3d(0,-7px,0) scale(1.012)} 70%{transform:translate3d(0,0,0) scale(.998)} }
 
+/* Featured OBJECT 01: keep the actual product fully visible and add a restrained cinematic float. */
 .hero-art { perspective:1000px; }
-.hero-product-feature { transform:translateZ(0); }
-.hero-product-feature img { transform:scale(1); transition:transform .9s var(--dew-motion),filter .9s var(--dew-motion); }
-.hero-product-feature:hover img { transform:scale(1.055); filter:saturate(1.08) contrast(1.035); }
-.hero-product-feature::before {
-  content:""; position:absolute; inset:0; z-index:2; pointer-events:none;
-  background:linear-gradient(115deg,transparent 28%,rgba(255,255,255,.18) 48%,transparent 68%); transform:translateX(-125%);
+.hero-product-feature {
+  position:relative; display:block; width:100%; height:100%; padding:0; margin:0;
+  border:0; border-radius:inherit; overflow:hidden; cursor:pointer;
+  background:#f2f1ed; transform:translateZ(0); animation:heroFloat 6s ease-in-out infinite;
+  will-change:transform;
 }
-.hero-product-feature:hover::before { animation:heroSweep .9s var(--dew-motion) both; }
-@keyframes heroSweep { to{transform:translateX(125%)} }
+.hero-product-feature img {
+  display:block; width:100%; height:100%; max-width:none;
+  object-fit:contain !important; object-position:center center;
+  padding:5%; background:#f2f1ed;
+  transform:scale(1); transform-origin:center;
+  transition:transform .7s var(--dew-motion),filter .7s var(--dew-motion);
+}
+.hero-product-feature:hover { animation-play-state:paused; }
+.hero-product-feature:hover img { transform:scale(1.035); filter:saturate(1.06) contrast(1.025); }
+.hero-product-feature::before {
+  content:""; position:absolute; inset:-5% -35%; z-index:2; pointer-events:none;
+  background:linear-gradient(115deg,transparent 38%,rgba(255,255,255,.22) 50%,transparent 62%);
+  transform:translateX(-75%); opacity:0;
+}
+.hero-product-feature:hover::before { opacity:1; animation:heroSweep .9s var(--dew-motion) both; }
+@keyframes heroFloat {
+  0%,100% { transform:translate3d(0,0,0) scale(1); }
+  50% { transform:translate3d(0,-6px,0) scale(1.008); }
+}
+@keyframes heroSweep { to{transform:translateX(75%)} }
 
 .product-detail-panel {
   transform:translateY(28px) scale(.965) !important; opacity:1 !important;
@@ -72,9 +90,10 @@
   .product-card::before { display:none; }
   .product-card.dew-enter { animation-duration:.4s; }
   .hero-product-feature::before { display:none; }
+  .hero-product-feature img { padding:7%; }
 }
 @media (prefers-reduced-motion:reduce) {
-  .product-card,.product-card::before,.product-card.dew-enter,.product-card.dew-added,.hero-product-feature img,.product-detail-panel,
+  .product-card,.product-card::before,.product-card.dew-enter,.product-card.dew-added,.hero-product-feature,.hero-product-feature img,.product-detail-panel,
   .product-detail-modal .modal-backdrop,.product-detail-main-image::after,.cart-drawer .drawer-panel,.bag-button.dew-count-pop span,
   .interaction-ripple::after { animation:none !important; transition:none !important; }
 }
