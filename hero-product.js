@@ -3,12 +3,9 @@
   "use strict";
 
   function openFeaturedProduct() {
-    const card = document.querySelector('.product-card .product-name');
-    if (!card) return;
-
     const target = [...document.querySelectorAll('.product-card')].find((item) => {
       const name = item.querySelector('.product-name')?.textContent?.trim();
-      return name === 'FoldAway Storage Vault';
+      return name === 'BunnyGlow Touch Night Light';
     });
 
     if (target) {
@@ -16,8 +13,7 @@
       return;
     }
 
-    // Product detail routing also supports direct hash navigation.
-    window.location.hash = '#product/dw-storage-vault';
+    window.location.hash = '#product/dw-bunnyglow';
   }
 
   function init() {
