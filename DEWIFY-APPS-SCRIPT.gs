@@ -35,7 +35,7 @@ const PAYMENT_STATUSES=["PENDING","PAID","FAILED","REFUNDED","COD_PENDING"];
 /* ---------- HTTP ---------- */
 
 function doGet() {
-  return json_({ok:true,service:"DEWIFY Orders API",status:"online",version:"2.0"});
+  return json_({ok:true,service:"DEWIFY Orders API",status:"online",version:"2.1"});
 }
 
 function doPost(e) {
@@ -50,7 +50,6 @@ function doPost(e) {
 
     const action=clean_(input.action,40);
 
-    // Existing storefront requests have no action, so they remain create-order calls.
     if(action==="auth") {
       requireAdmin_(input.token);
       return json_({ok:true,authenticated:true});
@@ -181,8 +180,9 @@ function validateAndNormalize_(input) {
   const total=items.reduce(function(sum,i){return sum+i.price*i.qty;},0);
   if(!Number.isFinite(total)||total<0) throw new Error("Invalid total.");
 
+  // COD is retained only for historical/admin compatibility. The storefront no longer submits it.
   const paymentMethod=clean_(input.paymentMethod,30).toUpperCase();
-  if(paymentMethod!=="COD"&&paymentMethod!=="UPI") {
+  if(paymentMethod!=="ONLINE"&&paymentMethod!=="UPI"&&paymentMethod!=="COD") {
     throw new Error("Invalid payment method.");
   }
 
@@ -227,7 +227,6 @@ function ensureHeaders_(sheet) {
 
   HEADERS.forEach(function(h,i){
     if(current[i]!==h) {
-      // Preserve the original 14-column layout; append only genuinely missing columns.
       if(i<14) {
         throw new Error('The first 14 headers of "'+SHEET_NAME+'" do not match the required order.');
       }
