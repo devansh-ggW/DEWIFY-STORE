@@ -1,0 +1,102 @@
+/* DEWIFY — minimal editorial pass
+   Quiet hierarchy, cleaner controls, more negative space. CSS only. */
+:root{
+  --dew-line:rgba(243,241,235,.095);
+  --dew-muted:rgba(243,241,235,.56);
+  --dew-ink:rgba(243,241,235,.92);
+  --dew-accent:rgba(255,220,130,.82);
+  --dew-editorial:cubic-bezier(.2,.8,.18,1);
+}
+
+/* Major sections get a tiny editorial index instead of extra decoration. */
+.shop,.manifesto,.faq{position:relative;}
+.shop::before,.manifesto::before,.faq::before{
+  content:counter(dew-section, decimal-leading-zero);
+  position:absolute;
+  top:clamp(42px,6vw,72px);
+  left:max(14px,calc((100% - 1240px)/2));
+  color:rgba(243,241,235,.34);
+  font:600 10px/1 "Space Grotesk",sans-serif;
+  letter-spacing:.18em;
+}
+main{counter-reset:dew-section;}
+.shop::before{counter-increment:dew-section;}
+.manifesto::before{counter-increment:dew-section;}
+.faq::before{counter-increment:dew-section;}
+
+/* Hairline rhythm between content zones. */
+.section-heading{border-bottom:1px solid var(--dew-line);padding-bottom:22px;}
+.filters{border-bottom:1px solid var(--dew-line);padding-bottom:18px;margin-bottom:26px;}
+.manifesto-inner,.faq-list{position:relative;}
+.manifesto-inner::before,.faq-list::before{
+  content:"";display:block;height:1px;background:var(--dew-line);margin-bottom:clamp(28px,5vw,54px);
+}
+
+/* Filters become quiet editorial tabs instead of heavy pills. */
+.filter{
+  border:0 !important;background:transparent !important;box-shadow:none !important;
+  border-radius:0 !important;padding:7px 2px !important;margin-right:22px;
+  color:rgba(243,241,235,.5) !important;position:relative;transform:none !important;
+  transition:color .35s var(--dew-editorial) !important;
+}
+.filter::after{display:none !important;}
+.filter::before{
+  content:"";position:absolute;left:0;right:100%;bottom:0;height:1px;
+  background:currentColor;transition:right .42s var(--dew-editorial);
+}
+.filter:hover{color:var(--dew-ink) !important;}
+.filter.active{color:var(--dew-ink) !important;}
+.filter.active::before{right:0;}
+
+/* Buttons: less “button”, more control. */
+.add-button,.button,.bag-button,.clear-button,.icon-button{
+  box-shadow:none !important;
+}
+.add-button:hover,.button:hover,.bag-button:hover,.clear-button:hover,.icon-button:hover{
+  transform:translateY(-1px);
+}
+.button span,.add-button span{display:inline-block;transition:transform .42s var(--dew-editorial);}
+.button:hover span,.add-button:hover span{transform:translateX(3px);}
+
+/* Product cards breathe without adding visual noise. */
+.product-grid{column-gap:22px !important;row-gap:34px !important;}
+.product-info{padding:18px 14px 20px !important;}
+.product-meta{font-size:10px !important;letter-spacing:.14em !important;color:var(--dew-muted) !important;}
+.product-name{letter-spacing:-.015em !important;}
+
+/* Soft section headings — hierarchy through spacing, not effects. */
+.section-note{max-width:34ch !important;color:var(--dew-muted) !important;}
+.eyebrow{letter-spacing:.2em !important;}
+
+/* FAQ becomes visually quieter while preserving native details behavior. */
+.faq-item{border-top:1px solid var(--dew-line) !important;border-bottom:0 !important;}
+.faq-item summary{padding:20px 0 !important;}
+.faq-item summary span{transition:transform .42s var(--dew-editorial);}
+.faq-item[open] summary span{transform:rotate(45deg);}
+
+/* Footer: stronger hierarchy, less clutter. */
+.footer{border-top:1px solid var(--dew-line) !important;}
+.footer-links a{transition:opacity .35s var(--dew-editorial),transform .35s var(--dew-editorial);}
+.footer-links a:hover{opacity:1;transform:translateY(-1px);}
+
+/* One-pixel reading rail, populated by dew-motion.js. */
+.dew-scroll-progress{position:fixed;top:0;left:0;width:100%;height:1px;z-index:10050;pointer-events:none;background:transparent;}
+.dew-scroll-progress::after{content:"";display:block;width:var(--dew-progress,0%);height:100%;background:rgba(255,229,146,.72);transform-origin:left center;}
+
+/* Subtle anchor settling. */
+html{scroll-behavior:smooth;}
+
+@media(max-width:760px){
+  .shop::before,.manifesto::before,.faq::before{left:14px;top:28px;font-size:9px;}
+  .section-heading{padding-bottom:17px;}
+  .filters{padding-bottom:14px;margin-bottom:20px;white-space:nowrap;overflow-x:auto;scrollbar-width:none;}
+  .filters::-webkit-scrollbar{display:none;}
+  .filter{margin-right:18px !important;}
+  .product-grid{column-gap:12px !important;row-gap:24px !important;}
+  .product-info{padding:13px 11px 15px !important;}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .filter,.filter::before,.button span,.add-button span,.faq-item summary span,.footer-links a{transition:none !important;}
+  html{scroll-behavior:auto;}
+}
