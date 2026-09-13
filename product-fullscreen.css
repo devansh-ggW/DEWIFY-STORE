@@ -1,0 +1,123 @@
+/* ============================================================
+   DEWIFY — Full-screen product detail view
+   Turns the existing product detail modal into a page-like,
+   edge-to-edge product experience without changing cart logic.
+   ============================================================ */
+
+.product-detail-modal {
+  padding: 0 !important;
+  align-items: stretch !important;
+  justify-content: stretch !important;
+}
+
+.product-detail-modal .modal-backdrop {
+  display: none !important;
+}
+
+.product-detail-modal .product-detail-panel {
+  width: 100% !important;
+  max-width: none !important;
+  height: 100dvh !important;
+  max-height: none !important;
+  min-height: 100dvh !important;
+  margin: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  overflow: auto !important;
+  overscroll-behavior: contain;
+}
+
+.product-detail-modal.is-open .product-detail-panel {
+  transform: translateY(0) !important;
+}
+
+.product-detail-head {
+  min-height: 68px;
+  box-sizing: border-box;
+}
+
+.product-detail-grid {
+  min-height: calc(100dvh - 68px);
+}
+
+.product-detail-gallery {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: clamp(16px, 3vw, 36px);
+}
+
+.product-detail-main-image {
+  width: 100%;
+  max-height: calc(100dvh - 150px);
+  aspect-ratio: 1 / 1;
+}
+
+.product-detail-copy {
+  min-width: 0;
+  padding: clamp(24px, 4vw, 56px);
+  justify-content: center;
+}
+
+.product-detail-copy h1 {
+  max-width: 760px;
+}
+
+@media (min-width: 761px) {
+  .product-detail-gallery {
+    position: sticky;
+    top: 68px;
+    align-self: start;
+    height: calc(100dvh - 68px);
+    box-sizing: border-box;
+    overflow: auto;
+    border-right: 1px solid var(--line);
+  }
+
+  .product-detail-copy {
+    min-height: calc(100dvh - 68px);
+    box-sizing: border-box;
+  }
+}
+
+@media (max-width: 760px) {
+  .product-detail-grid {
+    min-height: auto;
+  }
+
+  .product-detail-gallery {
+    border-right: 0 !important;
+    border-bottom: 1px solid var(--line);
+    padding: 12px;
+  }
+
+  .product-detail-main-image {
+    max-height: none;
+    aspect-ratio: 1 / 1;
+  }
+
+  .product-detail-copy {
+    padding: 24px 18px 32px;
+    justify-content: flex-start;
+  }
+
+  .product-detail-copy h1 {
+    font-size: clamp(34px, 10vw, 48px);
+  }
+
+  .product-detail-head {
+    padding: 14px 16px;
+  }
+}
+
+@supports not (height: 100dvh) {
+  .product-detail-modal .product-detail-panel {
+    height: 100vh !important;
+    min-height: 100vh !important;
+  }
+
+  .product-detail-grid {
+    min-height: calc(100vh - 68px);
+  }
+}
