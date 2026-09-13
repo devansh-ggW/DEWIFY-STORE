@@ -1,0 +1,61 @@
+/* DEWIFY — minimal visual polish
+   No scroll fade-ins. Editorial structure, spacing, controls and tiny interaction cues only.
+*/
+:root{
+  --dew-line:rgba(243,241,235,.11);
+  --dew-line-soft:rgba(243,241,235,.07);
+  --dew-muted:rgba(243,241,235,.58);
+  --dew-bright:rgba(243,241,235,.88);
+  --dew-gold:#f3d78e;
+  --dew-ease:cubic-bezier(.2,.75,.18,1);
+}
+html{scroll-behavior:smooth;}
+body{background:#080808;}
+main section{position:relative;}
+main section:not(.hero)::before{
+  content:"";position:absolute;left:0;right:0;top:0;height:1px;background:var(--dew-line-soft);pointer-events:none;
+}
+.section{position:relative;}
+.section-heading{display:grid;grid-template-columns:minmax(0,1fr) minmax(220px,.42fr);gap:32px;align-items:end;}
+.section-heading::before{
+  content:attr(data-index);font-family:"Space Grotesk",sans-serif;font-size:11px;letter-spacing:.18em;color:var(--dew-muted);align-self:start;line-height:1;
+}
+.section-heading>div{min-width:0;}
+.section-heading .section-note{margin:0;color:var(--dew-muted);max-width:34ch;justify-self:end;}
+.filters{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:26px;padding-top:16px;border-top:1px solid var(--dew-line-soft);}
+.filter{background:transparent!important;border:1px solid transparent!important;color:rgba(243,241,235,.55)!important;padding:7px 11px!important;transition:color .32s var(--dew-ease),border-color .32s var(--dew-ease),background-color .32s var(--dew-ease),transform .32s var(--dew-ease)!important;}
+.filter:hover{color:var(--dew-bright)!important;border-color:var(--dew-line)!important;transform:translateY(-1px);}
+.filter.active{color:#080808!important;background:#f3f1eb!important;border-color:#f3f1eb!important;}
+.product-grid{border-top:1px solid var(--dew-line-soft);padding-top:22px;}
+.product-card{box-shadow:none!important;}
+.product-card:hover{box-shadow:0 14px 34px rgba(0,0,0,.18)!important;}
+.product-meta{font-size:10px!important;letter-spacing:.12em!important;text-transform:uppercase!important;color:var(--dew-muted)!important;}
+.product-name{letter-spacing:-.02em!important;line-height:1.08!important;}
+.price{letter-spacing:-.02em;}
+.add-button{background:transparent!important;color:var(--dew-bright)!important;border:1px solid var(--dew-line)!important;transition:background-color .34s var(--dew-ease),color .34s var(--dew-ease),border-color .34s var(--dew-ease),transform .34s var(--dew-ease)!important;}
+.add-button:hover{background:#f3f1eb!important;color:#080808!important;border-color:#f3f1eb!important;transform:translateY(-1px);}
+.footer{border-top:1px solid var(--dew-line-soft)!important;}
+.footer-links{gap:22px!important;}
+.footer-links a{color:var(--dew-muted)!important;transition:color .28s var(--dew-ease)!important;}
+.footer-links a:hover{color:var(--dew-bright)!important;}
+.manifesto-copy{max-width:55ch!important;}
+.faq-list{border-top:1px solid var(--dew-line-soft)!important;}
+.faq-item{border-bottom:1px solid var(--dew-line-soft)!important;}
+.faq-item summary{padding-block:18px!important;}
+.faq-item summary span{transition:transform .42s var(--dew-ease)!important;}
+.faq-item[open] summary span{transform:rotate(45deg)!important;}
+/* Tiny editorial index markers; no extra DOM required. */
+#shop::after{content:"01";position:absolute;right:0;top:0;font:500 10px/1 "Space Grotesk",sans-serif;letter-spacing:.16em;color:var(--dew-muted);}
+#about::after{content:"02";position:absolute;right:0;top:0;font:500 10px/1 "Space Grotesk",sans-serif;letter-spacing:.16em;color:var(--dew-muted);}
+#faq::after{content:"03";position:absolute;right:0;top:0;font:500 10px/1 "Space Grotesk",sans-serif;letter-spacing:.16em;color:var(--dew-muted);}
+/* A restrained top reading progress line. */
+#dewProgress{position:fixed;left:0;top:0;width:100%;height:2px;z-index:10001;pointer-events:none;background:transparent;}
+#dewProgress i{display:block;height:100%;width:0;background:rgba(243,215,142,.86);transform-origin:left center;will-change:width;}
+@media(max-width:760px){
+  .section-heading{display:block;}
+  .section-heading::before{display:none;}
+  .section-heading .section-note{margin-top:14px;justify-self:auto;max-width:42ch;}
+  .filters{margin-top:20px;padding-top:13px;overflow-x:auto;flex-wrap:nowrap;scrollbar-width:none;}
+  .filters::-webkit-scrollbar{display:none;}
+  #shop::after,#about::after,#faq::after{right:2px;}
+}
